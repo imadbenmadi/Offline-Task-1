@@ -7,6 +7,7 @@ const NotesController = {
     getNotes,
     getNote,
     updateNote,
+    deleteNote,
     createNote,
 };
 module.exports = NotesController;
