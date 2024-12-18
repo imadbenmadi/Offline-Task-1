@@ -1,9 +1,11 @@
 import { createBrowserRouter } from "react-router-dom";
 
 import App from "./App";
-import Login from "./Components/Auth/Login/Login";
-import Register from "./Components/Auth/Register/Register";
+import Login from "./Pages/Login";
+import Register from "./Pages/Register";
 import Default from "./Default";
+import Notes from "./Pages/Notes";
+import Profile from "./Pages/Profile";
 
 import Not_Found from "./Components/Not_Found";
 import Not_Finished from "./Components/Not_Finished";
@@ -37,9 +39,15 @@ const routes = createBrowserRouter([
         element: <Register />,
         errorElement: <ErrorElement />,
     },
+
     {
-        path: "/Register",
-        element: <Login />,
+        path: "/Notes",
+        element: <Notes />,
+        errorElement: <ErrorElement />,
+    },
+    {
+        path: "/Profile",
+        element: <Profile />,
         errorElement: <ErrorElement />,
     },
 
