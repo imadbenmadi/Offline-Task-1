@@ -11,7 +11,6 @@ const initialState = {
     user: null,
     Notifications: null,
     userId: null,
-    userType: null,
 };
 const reducer = (state, action) => {
     switch (action.type) {
@@ -19,7 +18,6 @@ const reducer = (state, action) => {
             return {
                 ...state,
                 userId: action.payload.userId,
-                userType: action.payload.userType,
             };
         case "LOGOUT":
             return {
@@ -56,12 +54,11 @@ export const AppProvider = ({ children }) => {
     const set_Auth = (isAuth) => {
         dispatch({ type: "SET_AUTH", payload: isAuth });
     };
-    const store_login = (userId, userType) => {
+    const store_login = (userId) => {
         dispatch({
             type: "LOGIN",
             payload: {
                 userId,
-                userType,
             },
         });
     };

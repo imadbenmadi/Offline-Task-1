@@ -4,10 +4,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import handleRegister from "../API_Calls/Post_Register";
 function Register() {
-    const [userType_value, setuserType_value] = useState("teacher");
-    function handle_change_UserType(value) {
-        setuserType_value(value);
-    }
+
     return (
         <div className="flex">
             <div className=" w-1/2   hidden md:block   h-[calc(100vh)]">
@@ -29,7 +26,6 @@ function Register() {
                     <div>
                         <Formik
                             initialValues={{
-                                userType: userType_value,
                                 firstName: "",
                                 lastName: "",
                                 email: "",
@@ -77,68 +73,6 @@ function Register() {
                         >
                             {({ isSubmitting, setFieldValue }) => (
                                 <Form className="  flex flex-col text-sm md:text-lg  gap-4 text-black_text">
-                                    <div className="  flex items-center justify-center gap-4 md:gap-8 w-full text-gray_v">
-                                        <div
-                                            className={` cursor-pointer flex items-center justify-between gap-2  ${
-                                                userType_value == "teacher"
-                                                    ? "border-2 border-perpol_v text-perpol_v"
-                                                    : "border border-gray_white text-gray-400"
-                                            } rounded-lg  text-base py-1 font-semibold px-4`}
-                                            onClick={() => {
-                                                setFieldValue(
-                                                    "userType",
-                                                    "teacher"
-                                                ),
-                                                    handle_change_UserType(
-                                                        "teacher"
-                                                    );
-                                            }}
-                                        >
-                                            <div
-                                                className={` w-4 h-4 rounded-full border-2 ${
-                                                    userType_value == "teacher"
-                                                        ? "border-perpol_v"
-                                                        : "border-gray_white"
-                                                } flex items-center justify-center`}
-                                            >
-                                                {userType_value ==
-                                                    "teacher" && (
-                                                    <div className=" w-2 h-2 rounded-full bg-perpol_v"></div>
-                                                )}
-                                            </div>
-                                            <div>Teacher</div>
-                                        </div>
-                                        <div
-                                            className={` cursor-pointer flex items-center justify-between gap-2  ${
-                                                userType_value == "student"
-                                                    ? "border-2 border-perpol_v text-perpol_v"
-                                                    : "border border-gray_white text-gray-400"
-                                            } rounded-lg  text-base py-1 font-semibold px-4`}
-                                            onClick={() => {
-                                                setFieldValue(
-                                                    "userType",
-                                                    "student"
-                                                ),
-                                                    handle_change_UserType(
-                                                        "student"
-                                                    );
-                                            }}
-                                        >
-                                            <div
-                                                className={` w-4 h-4 rounded-full border-2 ${
-                                                    userType_value == "student"
-                                                        ? "border-perpol_v"
-                                                        : "border-gray_white"
-                                                } flex items-center justify-center`}
-                                            >
-                                                {userType_value ==
-                                                    "student" && (
-                                                    <div className=" w-2 h-2 rounded-full bg-perpol_v"></div>
-                                                )}
-                                            </div>
-                                            <div>Student</div>
-                                        </div>
-                                    </div>
                                     <div className=" flex flex-col md:flex-row items-center justify-center gap-6 md:gap-4 w-full pb-6 ">
                                         <div className="w-full  md:w-[50%]  relative">
                                             <div className="  font-semibold text-sm pb-1">

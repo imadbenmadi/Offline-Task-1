@@ -5,7 +5,7 @@ const Users = require("../../Models/Teacher");
 
 const handleRegister = async (req, res) => {
     try {
-        const { firstName, lastName, email, password, userType } = req.body;
+        const { firstName, lastName, email, password } = req.body;
         if (!firstName || !lastName || !email || !password) {
             return res.status(409).json({ message: "Missing Data" });
         } else if (firstName.length < 3) {
@@ -30,9 +30,7 @@ const handleRegister = async (req, res) => {
             });
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
             return res.status(409).json({ message: "Invalid email" });
-        } else if (userType !== "teacher" && userType !== "student") {
-            return res.status(409).json({ message: "Invalid user type" });
-        }
+        } 
 
         const exist_User = await Users.findOne({
             where: { email: email },

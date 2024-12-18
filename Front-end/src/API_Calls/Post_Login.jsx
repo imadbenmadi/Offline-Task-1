@@ -8,11 +8,7 @@ async function handleLogin(values, { setSubmitting }) {
         });
 
         if (response.status == 200) {
-            if (response.data.userType == "teacher") {
-                window.location.href = `/Teacher`;
-            } else if (response.data.userType == "student") {
-                window.location.href = `/Student`;
-            } else window.location.href = `/Home`;
+            window.location.href = `/Notes`;
         } else if (response.status == 401) {
             setSubmitting(false);
             Swal.fire("Error!", "Username or Password isn't correct", "error");

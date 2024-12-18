@@ -61,7 +61,6 @@ const handleLogin = async (req, res) => {
             return res.status(200).json({
                 message: "Logged In Successfully",
                 userId: user.id,
-                userType: userType,
             });
         } else {
             return res.status(401).json({

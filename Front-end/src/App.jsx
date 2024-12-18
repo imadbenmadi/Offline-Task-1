@@ -8,13 +8,12 @@ import { useAppContext } from "./AppContext";
 function App() {
     const Navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    // const [userType, setUserType] = useState(null);
     const { set_Auth, store_login } = useAppContext();
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(
-                    "http://localhost:3000/Check_Auth",
+                    "http://localhost:3000/auth/Check_Auth",
                     {
                         withCredentials: true,
                         validateStatus: () => true,
@@ -22,27 +21,12 @@ function App() {
                 );
 
                 if (response.status == 200) {
-                    // store_login(response.data.userId, response.data.userType);
-                    // setUserType(response.data.userType);
-                    if (!response.data.userType || !response.data.userId) {
+                    if ( !response.data.userId) {
                         set_Auth(false);
                         return;
                     }
                     set_Auth(true);
-                    store_login(response.data.userId, response.data.userType);
-
-                    // if (response.data.userType == "Director") {
-                    //     Navigate(`/Director`);
-                    // } else if (response.data.userType == "Malad") {
-                    //     Navigate(`/Malad`);
-                    // } else if (response.data.userType == "Doctor") {
-                    //     Navigate(`/Doctor`);
-                    // } else if (response.data.userType == "Worker") {
-                    //     Navigate(`/Worker`);
-                    // } else {
-                    //     set_Auth(false);
-                    //     return;
-                    // }
+                    store_login(response.data.userId);
                 } else {
                     set_Auth(false);
                 }
@@ -50,7 +34,6 @@ function App() {
                 set_Auth(false);
             }
         };
-        
 
         const fetch_fonts = () => {
             return new Promise((resolve) => {
