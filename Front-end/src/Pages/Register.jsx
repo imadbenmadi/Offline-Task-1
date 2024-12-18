@@ -1,10 +1,9 @@
-import Register_image from "../../../../public/Register.png";
+import Register_image from "../../public/Register.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import handleRegister from "../API_Calls/Post_Register";
 function Register() {
-
     return (
         <div className="flex">
             <div className=" w-1/2   hidden md:block   h-[calc(100vh)]">
