@@ -62,7 +62,7 @@ export const AppProvider = ({ children }) => {
             },
         });
     };
-    const store_logout = () => {
+    const logout = () => {
         dispatch({ type: "LOGOUT" });
     };
     const set_user = (user) => {
@@ -83,7 +83,7 @@ export const AppProvider = ({ children }) => {
     };
     const AppContextValue = {
         ...state,
-        store_logout,
+        logout,
         set_Auth,
         store_login,
         set_user,

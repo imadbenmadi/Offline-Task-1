@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 import NotesList from "../Components/Notes/NotesList";
 import Input from "../Components/Notes/Input";
+import NavBar from "../Components/NavBar/NavBar";
 function Notes() {
     const [Notes, setNotes] = useState([]);
     useEffect(() => {
@@ -22,6 +23,7 @@ function Notes() {
 
     return (
         <div className=" relative h-screen flex flex-col">
+            <NavBar />
             <NotesList Notes={Notes} />
             <div className=" fixed bottom-0 ">
                 <Input />
