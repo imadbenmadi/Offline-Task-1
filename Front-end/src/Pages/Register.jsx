@@ -2,7 +2,7 @@ import Register_image from "../../../../public/Register.png";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import handleRegister from "./Post_Register";
+import handleRegister from "../API_Calls/Post_Register";
 function Register() {
     const [userType_value, setuserType_value] = useState("teacher");
     function handle_change_UserType(value) {

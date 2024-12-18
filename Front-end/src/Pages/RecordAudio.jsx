@@ -1,25 +1,21 @@
 import React, { useState, useRef, useEffect } from "react";
-import WaveSurfer from "wavesurfer.js";
 
-const RecordAudio = () => {
+const RecordAudioWithLiveWaves = () => {
     const [isRecording, setIsRecording] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
-    const waveformRef = useRef(null);
-    const waveSurferInstance = useRef(null);
+    const [audioChunks, setAudioChunks] = useState([]);
+    const canvasRef = useRef(null);
+    const audioContextRef = useRef(null);
+    const analyserRef = useRef(null);
+    const dataArrayRef = useRef(null);
+    const animationIdRef = useRef(null);
 
-    // Initialize WaveSurfer instance on mount
     useEffect(() => {
-        waveSurferInstance.current = WaveSurfer.create({
-            container: waveformRef.current,
-            waveColor: "#A78BFA", // Violet
-            progressColor: "#8B5CF6", // Indigo
-            cursorColor: "#6366F1", // Blue
-            barWidth: 3,
-            height: 80,
-            responsive: true,
-            interact: false,
-        });
+        // Cleanup on unmount
+        return () => {
+            stopVisualization();
+        };
     }, []);
 
     const startRecording = async () => {
@@ -30,16 +26,32 @@ const RecordAudio = () => {
             const recorder = new MediaRecorder(stream);
             setMediaRecorder(recorder);
 
-            const audioChunks = [];
-            recorder.ondataavailable = (e) => audioChunks.push(e.data);
+            // Audio stream analysis setup
+            audioContextRef.current = new (window.AudioContext ||
+                window.webkitAudioContext)();
+            const source =
+                audioContextRef.current.createMediaStreamSource(stream);
+            analyserRef.current = audioContextRef.current.createAnalyser();
+            analyserRef.current.fftSize = 2048;
+
+            source.connect(analyserRef.current);
+
+            const bufferLength = analyserRef.current.frequencyBinCount;
+            dataArrayRef.current = new Uint8Array(bufferLength);
+
+            visualizeWaves();
+
+            const chunks = [];
+            recorder.ondataavailable = (e) => chunks.push(e.data);
 
             recorder.onstop = () => {
-                const audioBlob = new Blob(audioChunks, { type: "audio/webm" });
-                setAudioBlob(audioBlob);
+                const blob = new Blob(chunks, { type: "audio/webm" });
+                setAudioBlob(blob);
 
-                // Load audio into WaveSurfer
-                const audioURL = URL.createObjectURL(audioBlob);
-                waveSurferInstance.current.load(audioURL);
+                // Stop visualizations
+                stopVisualization();
+
+                setAudioChunks([]);
             };
 
             recorder.start();
@@ -53,6 +65,57 @@ const RecordAudio = () => {
         if (mediaRecorder) {
             mediaRecorder.stop();
             setIsRecording(false);
+        }
+    };
+
+    const visualizeWaves = () => {
+        const canvas = canvasRef.current;
+        const canvasCtx = canvas.getContext("2d");
+        const analyser = analyserRef.current;
+        const dataArray = dataArrayRef.current;
+
+        const draw = () => {
+            animationIdRef.current = requestAnimationFrame(draw);
+            analyser.getByteTimeDomainData(dataArray);
+
+            canvasCtx.fillStyle = "#f3f4f6"; // Gray background
+            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+            canvasCtx.lineWidth = 2;
+            canvasCtx.strokeStyle = "#6366f1"; // Indigo waves
+            canvasCtx.beginPath();
+
+            const sliceWidth = (canvas.width * 1.0) / dataArray.length;
+            let x = 0;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                const v = dataArray[i] / 128.0;
+                const y = (v * canvas.height) / 2;
+
+                if (i === 0) {
+                    canvasCtx.moveTo(x, y);
+                } else {
+                    canvasCtx.lineTo(x, y);
+                }
+
+                x += sliceWidth;
+            }
+
+            canvasCtx.lineTo(canvas.width, canvas.height / 2);
+            canvasCtx.stroke();
+        };
+
+        draw();
+    };
+
+    const stopVisualization = () => {
+        if (animationIdRef.current) {
+            cancelAnimationFrame(animationIdRef.current);
+        }
+
+        if (audioContextRef.current) {
+            audioContextRef.current.close();
+            audioContextRef.current = null;
         }
     };
 
@@ -84,7 +147,7 @@ const RecordAudio = () => {
 
     const deleteRecording = () => {
         setAudioBlob(null);
-        waveSurferInstance.current.empty();
+        stopVisualization();
     };
 
     return (
@@ -94,15 +157,8 @@ const RecordAudio = () => {
             </h1>
 
             {/* Waveform Visualization */}
-            <div
-                ref={waveformRef}
-                className="mt-6 bg-gray-200 border border-gray-300 rounded-md h-20 flex items-center justify-center"
-            >
-                {!audioBlob && !isRecording && (
-                    <p className="text-gray-500">
-                        Start recording to see the waves
-                    </p>
-                )}
+            <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md h-40">
+                <canvas ref={canvasRef} className="w-full h-full"></canvas>
             </div>
 
             {/* Recording and Control Buttons */}
@@ -167,4 +223,4 @@ const RecordAudio = () => {
     );
 };
 
-export default RecordAudio;
+export default RecordAudioWithLiveWaves;
