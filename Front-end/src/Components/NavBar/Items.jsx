@@ -29,6 +29,17 @@ function Nav_Items({ Active_nav, handleLogout, LogoutClicked }) {
                         Notes{" "}
                     </Link>
                 </div>{" "}
+                <div
+                    className={` ${
+                        Active_nav == "Profile"
+                            ? "text-perpol_v"
+                            : "text-black_text"
+                    } md:hover:text-perpol_v transition-all duration-150  cursor-pointer`}
+                >
+                    <Link to={"/Profile"} className={" select-none"}>
+                        Profile{" "}
+                    </Link>
+                </div>{" "}
             </div>
             <div className=" flex items center justify-center gap-5">
                 <div className=" relative">

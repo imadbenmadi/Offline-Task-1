@@ -6,7 +6,7 @@ import NavBar from "../Components/NavBar/NavBar";
 function Notes() {
     const [Notes, setNotes] = useState([]);
     useEffect(() => {
-        fetch("http://localhost:5000/Notes", {
+        fetch("http://localhost:3000/Notes", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -22,8 +22,7 @@ function Notes() {
     }, []);
 
     return (
-        <div className=" relative h-screen flex flex-col">
-            <NavBar />
+        <div className=" relative  flex flex-col">
             <NotesList Notes={Notes} />
             <div className=" fixed bottom-0 ">
                 <Input />

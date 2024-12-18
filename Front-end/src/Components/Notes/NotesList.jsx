@@ -3,7 +3,8 @@ import React from "react";
 function NotesList({ Notes }) {
     if (!Notes || Notes.length === 0) {
         return (
-            <div className="text-center text-gray-700 mt-10">No Notes Yet</div>
+            <div className="text-center pt-12
+             text-gray-700 mt-10">No Notes Yet !</div>
         );
     }
     return (

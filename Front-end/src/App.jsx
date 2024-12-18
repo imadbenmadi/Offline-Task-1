@@ -5,6 +5,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import Logo from "../public/Logo.png";
 import { useAppContext } from "./AppContext";
+import NavBar from "./Components/NavBar/NavBar";
 function App() {
     const Navigate = useNavigate();
     const [loading, setLoading] = useState(true);
@@ -21,7 +22,7 @@ function App() {
                 );
 
                 if (response.status == 200) {
-                    if ( !response.data.userId) {
+                    if (!response.data.userId) {
                         set_Auth(false);
                         return;
                     }
@@ -73,8 +74,11 @@ function App() {
         );
     } else
         return (
-            <div className=" text-right">
-                <Outlet />
+            <div className=" text-right relative min-h-screen ">
+                <NavBar />
+                <div className=" pt-6">
+                    <Outlet />
+                </div>
             </div>
         );
 }
