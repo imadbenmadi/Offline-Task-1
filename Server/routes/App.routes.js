@@ -8,6 +8,8 @@ const authMiddleware = require("../middleware/Auth.middleware");
 const router = express.Router();
 
 router.use("/auth", authRoutes);
+
+
 router.use("/Notes",authMiddleware, NotesRoutes);
 router.use("/upload",authMiddleware, UploadRoutes);
 router.use("/Profile",authMiddleware, userRoutes);

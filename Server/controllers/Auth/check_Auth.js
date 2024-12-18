@@ -2,17 +2,13 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const Students = require("../../Models/Student");
+const Users = require("../../Models/Users");
 const Refresh_tokens = require("../../Models/RefreshTokens");
 const Teachers = require("../../Models/Teacher");
 
 router.get("/", async (req, res) => {
-    const {
-        Student_ACCESS_TOKEN_SECRET,
-        Student_REFRESH_TOKEN_SECRET,
-        Teacher_ACCESS_TOKEN_SECRET,
-        Teacher_REFRESH_TOKEN_SECRET,
-    } = process.env;
+    const { Users_ACCESS_TOKEN_SECRET, Users_REFRESH_TOKEN_SECRET } =
+        process.env;
 
     const accessToken = req.cookies.accessToken;
     const refreshToken = req.cookies.refreshToken;
@@ -31,9 +27,6 @@ router.get("/", async (req, res) => {
             });
 
         return res.sendStatus(401);
-        //     .json({
-        //     message: "Unauthorized : No tokens found",
-        // });
     }
     const verifyToken = (token, secret) => {
         return new Promise((resolve, reject) => {
@@ -53,24 +46,14 @@ router.get("/", async (req, res) => {
         accessTokenSecret
     ) => {
         if (!refreshToken) {
-            // res.clearCookie("accessToken");
-            // res.clearCookie("refreshToken");
             return res.sendStatus(401);
-            //     .json({
-            //     message: "Unauthorized: Refresh token is missing",
-            // });
         }
 
         const found_in_DB = await Refresh_tokens.findOne({
             where: { token: refreshToken },
         });
         if (!found_in_DB) {
-            // res.clearCookie("accessToken");
-            // res.clearCookie("refreshToken");
             return res.sendStatus(401);
-            //     .json({
-            //     message: "Unauthorized: Invalid refresh token",
-            // });
         }
 
         return new Promise((resolve, reject) => {
@@ -79,16 +62,11 @@ router.get("/", async (req, res) => {
                 refreshTokenSecret,
                 async (err, decoded) => {
                     if (err) {
-                        // res.clearCookie("accessToken");
-                        // res.clearCookie("refreshToken");
                         return res.sendStatus(401);
-                        //     .json({
-                        //     message: "Unauthorized: Invalid refresh token",
-                        // });
                     }
 
                     const newAccessToken = jwt.sign(
-                        { userId: decoded.userId, userType: decoded.userType },
+                        { userId: decoded.userId },
                         accessTokenSecret,
                         { expiresIn: "1h" }
                     );
@@ -100,27 +78,14 @@ router.get("/", async (req, res) => {
                         maxAge: 60 * 60 * 1000, // 1 hour in milliseconds
                     });
 
-                    let user = await Students.findOne({
+                    let user = await Users.findOne({
                         where: { id: decoded.userId },
                     });
-                    let userType = "student";
 
                     if (!user) {
-                        user = await Teachers.findOne({
-                            where: { id: decoded.userId },
-                        });
-                        userType = "teacher";
-                    }
-
-                    if (!user) {
-                        // res.clearCookie("accessToken");
-                        // res.clearCookie("refreshToken");
                         return res.sendStatus(404);
-                        //     .json({
-                        //     message: "Unauthorized: User not found",
-                        // });
                     }
-                    resolve({ userType, userId: user.id });
+                    resolve({ userId: user.id });
                 }
             );
         });
@@ -128,78 +93,38 @@ router.get("/", async (req, res) => {
 
     try {
         let decoded;
-        let userType;
-        let user;
 
-        // First check as a Student
+        let user = null;
+
         try {
-            // if (!accessToken) throw new Error("No access token found");
-            decoded = await verifyToken(
-                accessToken,
-                Student_ACCESS_TOKEN_SECRET
-            );
-            user = await Students.findOne({ where: { id: decoded.userId } });
-            userType = "student";
+            decoded = await verifyToken(accessToken, Users_ACCESS_TOKEN_SECRET);
+            user = await Users.findOne({ where: { id: decoded.userId } });
         } catch (err) {
             if (err.name === "TokenExpiredError" || !accessToken) {
                 try {
                     const result = await handleTokenExpired(
                         refreshToken,
-                        Student_REFRESH_TOKEN_SECRET,
-                        Student_ACCESS_TOKEN_SECRET
+                        Users_REFRESH_TOKEN_SECRET,
+                        Users_ACCESS_TOKEN_SECRET
                     );
                     return res.sendStatus(200);
                 } catch (err) {
-                    console.log("Error refreshing Student token:", err);
+                    console.log("Error refreshing Users token:", err);
                 }
             }
         }
 
-        // If not a Student, check as a Teacher
+        // If no user found for both Users and Teacher
         if (!user) {
-            try {
-                decoded = await verifyToken(
-                    accessToken,
-                    Teacher_ACCESS_TOKEN_SECRET
-                );
-                user = await Teachers.findOne({
-                    where: { id: decoded.userId },
-                });
-                userType = "teacher";
-            } catch (err) {
-                if (err.name === "TokenExpiredError" || !accessToken) {
-                    try {
-                        const result = await handleTokenExpired(
-                            refreshToken,
-                            Teacher_REFRESH_TOKEN_SECRET,
-                            Teacher_ACCESS_TOKEN_SECRET
-                        );
-                        return res.sendStatus(200);
-                    } catch (err) {
-                        console.log("Error refreshing Teacher token:", err);
-                    }
-                }
-            }
-        }
-
-        // If no user found for both Student and Teacher
-        if (!user) {
-            // res.clearCookie("accessToken");
-            // res.clearCookie("refreshToken");
             return res.sendStatus(401);
-            // .json({ message: "Unauthorized: Invalid access token" });
         }
 
         return res.status(200).json({
             message: "check auth: true, Access token is valid",
-            userType: userType,
             userId: user.id,
         });
     } catch (err) {
         console.log(err);
-        // res.clearCookie("accessToken");
-        // res.clearCookie("refreshToken");
-        // return res.status(500).json({ message: err.message });
     }
 });
 

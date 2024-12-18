@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Students = require("../../Models/Student");
-const Teachers = require("../../Models/Teacher");
+const Users = require("../../Models/Teacher");
 
 const handleRegister = async (req, res) => {
     try {
@@ -33,36 +33,24 @@ const handleRegister = async (req, res) => {
         } else if (userType !== "teacher" && userType !== "student") {
             return res.status(409).json({ message: "Invalid user type" });
         }
-        // if (!(await isemailValid(email))) {
-        //     return res.status(409).json({ message: "Invalid email domain" });
-        // }
-        const exist_Student = await Teachers.findOne({
+
+        const exist_User = await Users.findOne({
             where: { email: email },
         });
-        const exist_Teacher = await Students.findOne({
-            where: { email: email },
-        });
-        if (exist_Teacher || exist_Student) {
+
+        if (exist_User) {
             return res.status(400).json({
                 message: "email already exists , please use another email.",
             });
         }
-        let newUser = null;
-        if (userType === "teacher") {
-            newUser = await Teachers.create({
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-            });
-        } else if (userType === "student") {
-            newUser = await Students.create({
-                firstName: firstName,
-                lastName: lastName,
-                email: email,
-                password: password,
-            });
-        }
+
+        const newUser = await Users.create({
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password,
+        });
+
         if (!newUser) {
             return res.status(500).json({ message: "Error Creating User" });
         }

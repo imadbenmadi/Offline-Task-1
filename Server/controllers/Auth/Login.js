@@ -1,8 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const Students = require("../../Models/Student");
-const Teachers = require("../../Models/Teacher");
+const Users = require("../../Models/Users");
 const Refresh_tokens = require("../../Models/RefreshTokens");
 
 const handleLogin = async (req, res) => {
@@ -14,44 +13,23 @@ const handleLogin = async (req, res) => {
             return res.status(409).json({ message: "Invalid email" });
         }
         let user = null;
-        let userType = null;
-        user = await Teachers.findOne({ where: { email: email } });
-        userType = "teacher";
-        if (!user) {
-            user = await Students.findOne({ where: { email: email } });
-            userType = "student";
-        }
+
+        user = await Users.findOne({ where: { email: email } });
+
         if (!user) {
             return res.status(401).json({
-                message: "Username or password isn't correct",
+                message: "Email or password isn't correct",
             });
-        } else if (user && userType && user.password === password) {
-            const Access_Secrute =
-                userType == "teacher"
-                    ? process.env.Teacher_ACCESS_TOKEN_SECRET
-                    : userType == "student"
-                    ? process.env.Student_ACCESS_TOKEN_SECRET
-                    : null;
-            const Refresh_Secrute =
-                userType == "teacher"
-                    ? process.env.Teacher_REFRESH_TOKEN_SECRET
-                    : userType == "student"
-                    ? process.env.Student_REFRESH_TOKEN_SECRET
-                    : null;
-
+        } else if (user && user.password === password) {
+            const Access_Secrute = process.env.Users_ACCESS_TOKEN_SECRET;
+            const Refresh_Secrute = process.env.Users_REFRESH_TOKEN_SECRET;
             const accessToken = jwt.sign(
-                { userId: user.id, userType: userType },
-                // userType == "teacher"
-                //     ? process.env.Teacher_ACCESS_TOKEN_SECRET
-                //     : process.env.Student_ACCESS_TOKEN_SECRET,
+                { userId: user.id },
                 Access_Secrute,
                 { expiresIn: "1h" }
             );
             const refreshToken = jwt.sign(
-                { userId: user.id, userType: userType },
-                // userType == "teacher"
-                // ? process.env.Teacher_REFRESH_TOKEN_SECRET
-                // : process.env.Student_REFRESH_TOKEN_SECRET,
+                { userId: user.id },
                 Refresh_Secrute,
                 { expiresIn: "1d" }
             );
@@ -87,7 +65,7 @@ const handleLogin = async (req, res) => {
             });
         } else {
             return res.status(401).json({
-                message: "Username or password isn't correct",
+                message: "Email or password isn't correct",
             });
         }
     } catch (err) {
