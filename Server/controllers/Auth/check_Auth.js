@@ -4,7 +4,6 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const Users = require("../../Models/Users");
 const Refresh_tokens = require("../../Models/RefreshTokens");
-const Teachers = require("../../Models/Teacher");
 
 router.get("/", async (req, res) => {
     const { Users_ACCESS_TOKEN_SECRET, Users_REFRESH_TOKEN_SECRET } =
@@ -114,7 +113,6 @@ router.get("/", async (req, res) => {
             }
         }
 
-        // If no user found for both Users and Teacher
         if (!user) {
             return res.sendStatus(401);
         }

@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Students = require("../../Models/Student");
-const Users = require("../../Models/Teacher");
+const Users = require("../../Models/Users");
 
 const handleRegister = async (req, res) => {
     try {
@@ -30,7 +29,7 @@ const handleRegister = async (req, res) => {
             });
         } else if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(email)) {
             return res.status(409).json({ message: "Invalid email" });
-        } 
+        }
 
         const exist_User = await Users.findOne({
             where: { email: email },
