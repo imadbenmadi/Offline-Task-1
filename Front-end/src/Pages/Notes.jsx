@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
-import dayjs from "dayjs";
 import NotesList from "../Components/Notes/NotesList";
 import Input from "../Components/Notes/Input";
-import NavBar from "../Components/NavBar/NavBar";
 function Notes() {
     const [Notes, setNotes] = useState([]);
     useEffect(() => {
@@ -22,9 +20,9 @@ function Notes() {
     }, []);
 
     return (
-        <div className=" relative  flex flex-col">
+        <div className=" relative  flex flex-col w-full">
             <NotesList Notes={Notes} />
-            <div className=" fixed bottom-0 ">
+            <div className=" fixed bottom-0 w-screen p-4 bg-white shadow-lg">
                 <Input />
             </div>
         </div>

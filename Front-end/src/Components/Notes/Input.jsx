@@ -8,25 +8,24 @@ function Input() {
     };
 
     return (
-        <div className="flex flex-col items-center space-y-4 p-4">
-            {/* Input field and submit button */}
-            <div className="flex items-center space-x-2 w-full max-w-md">
+        <div className="flex items-center w-screen max-w-lg bg-gray-100 p-4 rounded-lg shadow">
+            {/* Input Field and Record Button */}
+            <div className="flex items-center flex-grow space-x-2">
                 <input
                     type="text"
                     placeholder="Type your message..."
                     className="flex-grow border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
-                    Submit
+                <button
+                    onClick={toggleAudioPopup}
+                    className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                >
+                    🎙️
                 </button>
             </div>
-
-            {/* Record Audio Button */}
-            <button
-                onClick={toggleAudioPopup}
-                className="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
-            >
-                Record Audio
+            {/* Send Button */}
+            <button className="ml-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition">
+                Send
             </button>
 
             {/* Audio Recording Popup */}
