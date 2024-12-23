@@ -1,8 +1,36 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
+import dayjs from "dayjs";
 
 function Note_PopUp({ note_id, setNote_popup, Notes }) {
     const note = Notes.find((n) => n.id === note_id);
+
+    const [isEditing, setIsEditing] = useState(false);
+    const [editTitle, setEditTitle] = useState(note?.Title || "");
+    const [editDescription, setEditDescription] = useState(
+        note?.Description || ""
+    );
+
+    const handleEditToggle = () => {
+        setIsEditing((prev) => !prev);
+    };
+
+    const handleEditSubmit = () => {
+        console.log("Submit updated note:", { editTitle, editDescription });
+        // Add API call or state update logic here
+        setIsEditing(false);
+    };
+
+    const handleEditCancel = () => {
+        setEditTitle(note?.Title || "");
+        setEditDescription(note?.Description || "");
+        setIsEditing(false);
+    };
+
+    const handleDelete = () => {
+        console.log("Delete button clicked for note:", note);
+        // Add delete logic here
+    };
 
     return (
         <motion.div
@@ -15,11 +43,11 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.8 }}
-                className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+                className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full overflow-auto h-full"
             >
                 {/* Close Button */}
                 <button
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
+                    className="absolute top-4 right-4 text-gray-600 font-bold hover:text-gray-800 focus:outline-none"
                     onClick={() => setNote_popup(false)}
                 >
                     ✕
@@ -28,30 +56,83 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                 {/* Content */}
                 {!note ? (
                     <p className="text-red-500 text-center">Invalid note!</p>
-                ) : note.type === "text" ? (
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-800">
-                            {note.Title}
-                        </h2>
-                        <p className="mt-4 text-gray-600">{note.Description}</p>
-                    </div>
-                ) : note.type === "audio" ? (
-                    <div>
-                        <h2 className="text-xl font-bold text-gray-800">
-                            {note.Title}
-                        </h2>
-                        <audio
-                            controls
-                            className="mt-4 w-full"
-                            src={note.Audio_Link}
-                        >
-                            Your browser does not support the audio element.
-                        </audio>
-                    </div>
                 ) : (
-                    <p className="text-red-500 text-center">
-                        Invalid note type!
-                    </p>
+                    <div className="flex flex-col justify-between h-full">
+                        {/* Note Content */}
+                        {isEditing ? (
+                            <div>
+                                <input
+                                    type="text"
+                                    value={editTitle}
+                                    onChange={(e) =>
+                                        setEditTitle(e.target.value)
+                                    }
+                                    className="w-full p-2 border rounded-md text-gray-800 mb-4"
+                                />
+                                <textarea
+                                    value={editDescription}
+                                    onChange={(e) =>
+                                        setEditDescription(e.target.value)
+                                    }
+                                    className="w-full p-2 border rounded-md text-gray-800"
+                                    rows="5"
+                                />
+                            </div>
+                        ) : (
+                            <div>
+                                <h2 className="text-xl font-bold text-blue-600">
+                                    {note.Title}
+                                </h2>
+                                <p className="mt-4 text-gray-600">
+                                    {note.Description}
+                                </p>
+                            </div>
+                        )}
+
+                        {/* Buttons */}
+                        <div className="flex justify-between items-center mt-6">
+                            {isEditing ? (
+                                <>
+                                    <button
+                                        onClick={handleEditSubmit}
+                                        className="px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 focus:outline-none"
+                                    >
+                                        Submit
+                                    </button>
+                                    <button
+                                        onClick={handleEditCancel}
+                                        className="px-4 py-2 bg-gray-600 text-white rounded-md shadow-md hover:bg-gray-700 focus:outline-none"
+                                    >
+                                        Cancel
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    {note.type === "text" && (
+                                        <button
+                                            onClick={handleEditToggle}
+                                            className="px-4 py-2 bg-blue-600 text-white rounded-md shadow-md hover:bg-blue-700 focus:outline-none"
+                                        >
+                                            Edit
+                                        </button>
+                                    )}
+                                    <button
+                                        onClick={handleDelete}
+                                        className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 focus:outline-none"
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            )}
+                        </div>
+
+                        {/* Date */}
+                        <div>
+                            <p className="text-xs font-semibold text-gray-500 text-right mt-4">
+                                {dayjs(note.createdAt).format("DD-MMM-YYYY")}
+                            </p>
+                        </div>
+                    </div>
                 )}
             </motion.div>
         </motion.div>

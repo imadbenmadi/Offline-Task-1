@@ -30,11 +30,13 @@ function NotesList({ Notes }) {
             </ul>
             <AnimatePresence>
                 {note_popup && (
-                    <Note_PopUp
-                        note_id={note_popup}
-                        setNote_popup={setNote_popup}
-                        Notes={Notes}
-                    />
+                    <div className="min-h-[500px]">
+                        <Note_PopUp
+                            note_id={note_popup}
+                            setNote_popup={setNote_popup}
+                            Notes={Notes}
+                        />
+                    </div>
                 )}
             </AnimatePresence>
         </div>
