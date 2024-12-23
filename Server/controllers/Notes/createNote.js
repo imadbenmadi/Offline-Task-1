@@ -2,12 +2,11 @@ const Notes = require("../../models/Notes");
 const createNote = async (req, res) => {
     try {
         const { Title, Description } = req.body;
-        console.log(req.body);
-        
+
         const note = new Notes({
             Title,
             Description,
-            user: req.decoded.userId,
+            UserId: req.decoded.userId,
         });
         await note.save();
         res.json(note);
