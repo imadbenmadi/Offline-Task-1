@@ -9,7 +9,7 @@ import NavBar from "./Components/NavBar/NavBar";
 function App() {
     const Navigate = useNavigate();
     const [loading, setLoading] = useState(true);
-    const { set_Auth, store_login } = useAppContext();
+    const { is_Auth, set_Auth, store_login } = useAppContext();
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -65,6 +65,7 @@ function App() {
                 setLoading(false);
             });
     }, []);
+
     if (loading) {
         return (
             <div className=" w-screen h-screen flex flex-col items-center justify-center">

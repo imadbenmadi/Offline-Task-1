@@ -7,6 +7,7 @@ const fetchNotes = async ({ setNotes }) => {
         });
         setNotes(res.data);
     } catch (error) {
+        window.location.href = "/";
         console.error("Error fetching notes:", error);
     }
 };
