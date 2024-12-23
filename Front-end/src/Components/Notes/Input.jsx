@@ -44,7 +44,7 @@ function Input() {
     };
 
     return (
-        <div className="flex flex-col items-center w-screen bg-gray-100 py-6 px-4 rounded-lg shadow-lg">
+        <div className="flex flex-col items-center w-screen bg-gray-100 py-6 px-4 rounded-lg">
             {/* Input Fields */}
             <div className="flex flex-col space-y-4 w-full max-w-3xl">
                 <input
@@ -62,7 +62,7 @@ function Input() {
                 <div className="flex justify-between items-center space-x-4">
                     <button
                         onClick={toggleAudioPopup}
-                        className="flex items-center bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
+                        className="flex items-center  text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition"
                     >
                         🎙️ Record Audio
                     </button>
@@ -77,8 +77,8 @@ function Input() {
 
             {/* Audio Recording Popup */}
             {showAudioPopup && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                    <div className="bg-white rounded-lg p-6 space-y-4 shadow-lg max-w-sm w-full">
+                <div className="fixed inset-0  flex items-center justify-center shadow-lg bg-gray-900 bg-opacity-50">
+                    <div className="bg-white rounded-lg p-6 space-y-4  max-w-sm w-full">
                         <RecordAudio setAudioBlob={setAudioBlob} />
                         <button
                             onClick={toggleAudioPopup}
