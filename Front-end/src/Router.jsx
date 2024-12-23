@@ -11,7 +11,6 @@ import Not_Found from "./Components/Not_Found";
 import Not_Finished from "./Components/Not_Finished";
 import ErrorElement from "./Components/ErrorElement";
 
-import RecordAudio from "./Pages/RecordAudio";
 const routes = createBrowserRouter([
     {
         path: "/",
@@ -35,10 +34,7 @@ const routes = createBrowserRouter([
             },
         ],
     },
-    {
-        path: "/RecordAudio",
-        element: <RecordAudio />,
-    },
+    
     {
         path: "/Login",
         element: <Login />,

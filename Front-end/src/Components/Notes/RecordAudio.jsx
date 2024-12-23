@@ -151,7 +151,7 @@ const RecordAudioWithLiveWaves = () => {
     };
 
     return (
-        <div className="max-w-md mx-auto p-6 bg-white shadow-lg rounded-lg">
+        <div className="max-w-md mx-auto  bg-white  rounded-lg">
             <h1 className="text-2xl font-bold text-gray-800 text-center">
                 Audio Recorder
             </h1>
