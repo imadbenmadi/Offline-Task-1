@@ -14,7 +14,7 @@ function NavBar() {
 
     return (
         <div
-            className={` fixed  h-[60px] m-0   z-50 w-full bg-white  border-b   `}
+            className={` fixed  h-[60px] m-0  z-50 w-full bg-white  border-b   `}
         >
             <Items
                 Active_nav={Active_nav}

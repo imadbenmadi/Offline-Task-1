@@ -15,7 +15,7 @@ function Nav_Items({ Active_nav, handleLogout, LogoutClicked }) {
     };
 
     return (
-        <div className="hidden  md:flex  items-center justify-between mx-2 lg:mx-12  md:text-md lg:text-lg  font-[500] text-black_text h-full p-2 ">
+        <div className="  flex   items-center justify-between mx-2 lg:mx-12  md:text-md lg:text-lg  font-semibold text-black_text h-full p-2 ">
             <div></div>
             <div className="flex gap-6 lg:gap-14">
                 <div

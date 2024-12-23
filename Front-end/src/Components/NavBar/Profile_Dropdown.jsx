@@ -38,7 +38,7 @@ function Profile_Dropdown({
                     <div className="">
                         {LogoutClicked ? (
                             <div className="w-full ">
-                                <span className="small-loader font-bold m-auto"></span>
+                                <span className="small-loader font-semibold m-auto"></span>
                             </div>
                         ) : (
                             <div
