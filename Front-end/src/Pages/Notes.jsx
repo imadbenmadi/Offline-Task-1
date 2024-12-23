@@ -12,8 +12,8 @@ function Notes() {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
+            withCredentials: true,
         })
             .then((res) => res.json())
             .then((data) => {

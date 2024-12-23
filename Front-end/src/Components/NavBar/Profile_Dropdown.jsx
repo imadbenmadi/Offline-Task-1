@@ -8,6 +8,7 @@ function Profile_Dropdown({
     ProfileClicked,
     LogoutClicked,
     handleLogout,
+    setLogoutClicked,
 }) {
     return (
         <div>

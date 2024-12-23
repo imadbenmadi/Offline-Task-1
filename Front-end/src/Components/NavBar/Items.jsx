@@ -68,6 +68,7 @@ function Nav_Items({ Active_nav, handleLogout, LogoutClicked }) {
                         ProfileClicked={ProfileClicked}
                         LogoutClicked={LogoutClicked}
                         handleLogout={handleLogout}
+                        setLogoutClicked={setProfileClicked}
                     />
                 </div>{" "}
             </div>

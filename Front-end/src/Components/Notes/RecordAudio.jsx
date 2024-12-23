@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const RecordAudioWithLiveWaves = () => {
     const [isRecording, setIsRecording] = useState(false);
@@ -121,7 +122,7 @@ const RecordAudioWithLiveWaves = () => {
 
     const submitAudio = async () => {
         if (!audioBlob) {
-            alert("No audio recorded to submit!");
+            Swal.fire("Error", "No audio to submit.", "error");
             return;
         }
 
@@ -135,10 +136,14 @@ const RecordAudioWithLiveWaves = () => {
             });
 
             if (response.ok) {
-                alert("Audio submitted successfully!");
+                Swal.fire(
+                    "Success",
+                    "Audio submitted successfully.",
+                    "success"
+                );
                 deleteRecording();
             } else {
-                alert("Failed to submit audio.");
+                Swal.fire("Error", "Failed to submit audio.", "error");
             }
         } catch (error) {
             console.error("Error submitting audio:", error);

@@ -18,7 +18,7 @@ function NavBar() {
         >
             <Items
                 Active_nav={Active_nav}
-                handleLogout={handleLogout}
+                handleLogout={() => handleLogout()}
                 LogoutClicked={LogoutClicked}
                 setLogoutClicked={setLogoutClicked}
             />

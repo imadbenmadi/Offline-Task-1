@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import RecordAudio from "./RecordAudio";
-
+import Axios from "axios";
+import Swal from "sweetalert2";
 function Input() {
     const [showAudioPopup, setShowAudioPopup] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
@@ -10,33 +11,33 @@ function Input() {
     };
 
     const post_note = async () => {
-        const title = document.getElementById("Title").value || "Untitled";
-        const description = document.getElementById("Description").value || "";
-        const token = localStorage.getItem("token");
+        const Title = document.getElementById("Title").value || "UnTitled";
+        const Description = document.getElementById("Description").value || "";
 
         const formData = new FormData();
-        formData.append("title", title);
-        formData.append("description", description);
+        formData.append("Title", Title);
+        formData.append("Description", Description);
 
         if (audioBlob) {
             formData.append("voice_note", audioBlob, "recording.webm");
         }
 
         try {
-            const res = await fetch("http://localhost:3000/Notes", {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-                body: formData,
-            });
-            const data = await res.json();
+            let res = await Axios.post(
+                "http://localhost:3000/Notes",
+                formData,
+                {
+                    withCredentials: true,
+                    validateStatus: () => true,
+                }
+            );
+            console.log(res);
 
-            if (data.status === "success") {
-                alert("Note Added Successfully");
+            if (res.status === 200) {
+                Swal.fire("Success", "Note added successfully", "success");
                 setAudioBlob(null); // Clear the audioBlob after submission
             } else {
-                alert("Failed to add note");
+                Swal.fire("Error", "Failed to add note", "error");
             }
         } catch (error) {
             console.error("Error submitting note:", error);

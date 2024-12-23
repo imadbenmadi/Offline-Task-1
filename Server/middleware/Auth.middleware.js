@@ -26,7 +26,10 @@ const verifyUser = async (req, res, next) => {
     }
     try {
         let decoded = null;
-        decoded = jwt.verify(accessToken, process.env.User_ACCESS_TOKEN_SECRET);
+        decoded = jwt.verify(
+            accessToken,
+            process.env.Users_ACCESS_TOKEN_SECRET
+        );
 
         if (!decoded.userId)
             return res.status(401).json({
@@ -71,7 +74,7 @@ const verifyUser = async (req, res, next) => {
 
                 jwt.verify(
                     refreshToken,
-                    process.env.User_REFRESH_TOKEN_SECRET,
+                    process.env.Users_ACCESS_TOKEN_SECRET,
                     async (err, decoded) => {
                         if (err || foundInDB.userId !== decoded.userId) {
                             return res.status(401).json({
@@ -84,7 +87,7 @@ const verifyUser = async (req, res, next) => {
                             {
                                 userId: decoded.userId,
                             },
-                            process.env.User_ACCESS_TOKEN_SECRET,
+                            process.env.Users_ACCESS_TOKEN_SECRET,
                             { expiresIn: "1h" }
                         );
                         res.cookie("accessToken", newAccessToken, {

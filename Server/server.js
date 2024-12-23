@@ -18,7 +18,7 @@ app.use(appRoutes);
 
 // Root route
 app.get("/", (req, res) => {
-    res.send("Hello from DocGo");
+    res.send("Hello from Task");
 });
 
 // Start the server
