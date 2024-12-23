@@ -3,22 +3,13 @@ import NotesList from "../Components/Notes/NotesList";
 import Input from "../Components/Notes/Input";
 import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
+import fetchNotes from "../API_Calls/Fetch_Notes";
 function Notes() {
     const [Notes, setNotes] = useState([]);
     const [showInput, setShowInput] = useState(false);
 
     useEffect(() => {
-        const fetchNotes = async () => {
-            try {
-                let res = await axios.get("http://localhost:3000/Notes", {
-                    withCredentials: true,
-                });
-                setNotes(res.data);
-            } catch (error) {
-                console.error("Error fetching notes:", error);
-            }
-        };
-        fetchNotes();
+        fetchNotes({ setNotes });
     }, []);
 
     return (

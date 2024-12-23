@@ -7,7 +7,7 @@ const post_note = async ({ audioBlob, setAudioBlob, setNotes }) => {
 
     const formData = new FormData();
 
-    if (audioBlob) {
+    if (audioBlob != null) {
         formData.append("voice_note", audioBlob, "recording.webm");
         formData.append("type", "audio");
     } else {

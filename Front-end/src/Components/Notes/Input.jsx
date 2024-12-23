@@ -35,8 +35,8 @@ function Input({ setNotes }) {
                         🎙️ Record Audio
                     </button>
                     <button
-                        onClick={(setNotes) =>
-                            post_note(audioBlob, setAudioBlob, setNotes)
+                        onClick={() =>
+                            post_note({ audioBlob, setAudioBlob, setNotes })
                         }
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
                     >
