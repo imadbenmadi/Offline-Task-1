@@ -12,7 +12,7 @@ const Verify_Note_ownership = async (req, res, next) => {
                 message: "unauthorized : Invalid Note ",
             });
         }
-        if (Note.UserId !== decoded.userId) {
+        if (Note.userId !== decoded.userId) {
             return res.status(401).json({
                 message: "unauthorized : cannot access this Note ",
             });

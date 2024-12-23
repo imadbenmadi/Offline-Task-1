@@ -1,9 +1,12 @@
 import React from "react";
 import dayjs from "dayjs";
 
-function NoteCard({ Note }) {
+function NoteCard({ Note, change_note_popup }) {
     return (
-        <li className="border rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]">
+        <li
+            className="border cursor-pointer rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]"
+            onClick={() => change_note_popup(Note.id)}
+        >
             <div className="p-4 flex flex-col justify-between h-full">
                 <div>
                     {/* Note Title */}
