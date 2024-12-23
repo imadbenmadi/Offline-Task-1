@@ -24,7 +24,7 @@ function Notes() {
     return (
         <div className="relative  w-full overflow-auto">
             {/* Notes List */}
-            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="mt-6">
                 <NotesList Notes={Notes} />
             </div>
 
@@ -59,7 +59,7 @@ function Notes() {
                         exit={{ y: "100%" }}
                         transition={{ duration: 0.3 }}
                     >
-                        <Input />
+                        <Input setNotes={setNotes} />
                     </motion.div>
                 )}
             </AnimatePresence>

@@ -2,46 +2,13 @@ import React, { useState } from "react";
 import RecordAudio from "./RecordAudio";
 import Axios from "axios";
 import Swal from "sweetalert2";
-function Input() {
+import post_note from "../../API_Calls/post_note";
+function Input({ setNotes }) {
     const [showAudioPopup, setShowAudioPopup] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
 
     const toggleAudioPopup = () => {
         setShowAudioPopup(!showAudioPopup);
-    };
-
-    const post_note = async () => {
-        const Title = document.getElementById("Title").value || "UnTitled";
-        const Description = document.getElementById("Description").value || "";
-
-        const formData = new FormData();
-        formData.append("Title", Title);
-        formData.append("Description", Description);
-
-        if (audioBlob) {
-            formData.append("voice_note", audioBlob, "recording.webm");
-        }
-
-        try {
-            let res = await Axios.post(
-                "http://localhost:3000/Notes",
-                formData,
-                {
-                    withCredentials: true,
-                    validateStatus: () => true,
-                }
-            );
-            console.log(res);
-
-            if (res.status === 200) {
-                Swal.fire("Success", "Note added successfully", "success");
-                setAudioBlob(null); // Clear the audioBlob after submission
-            } else {
-                Swal.fire("Error", "Failed to add note", "error");
-            }
-        } catch (error) {
-            console.error("Error submitting note:", error);
-        }
     };
 
     return (
@@ -68,7 +35,9 @@ function Input() {
                         🎙️ Record Audio
                     </button>
                     <button
-                        onClick={post_note}
+                        onClick={(setNotes) =>
+                            post_note(audioBlob, setAudioBlob, setNotes)
+                        }
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
                     >
                         Post Note
