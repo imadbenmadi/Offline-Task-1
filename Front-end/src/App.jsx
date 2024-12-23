@@ -74,7 +74,7 @@ function App() {
         );
     } else
         return (
-            <div className=" text-right relative min-h-screen ">
+            <div className="  relative min-h-screen ">
                 <NavBar />
                 <div className=" pt-6">
                     <Outlet />

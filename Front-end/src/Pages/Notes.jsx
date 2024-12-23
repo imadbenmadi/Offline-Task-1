@@ -22,9 +22,11 @@ function Notes() {
     }, []);
 
     return (
-        <div className="relative flex flex-col w-full overflow-auto">
+        <div className="relative  w-full overflow-auto">
             {/* Notes List */}
-            <NotesList Notes={Notes} />
+            <div className="mt-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <NotesList Notes={Notes} />
+            </div>
 
             {/* Floating Button */}
             <motion.div
