@@ -2,6 +2,8 @@ import React from "react";
 import NoteCard from "./Note_Card";
 import { useState } from "react";
 import Note_PopUp from "./Note_PopUp";
+import { AnimatePresence } from "framer-motion";
+
 function NotesList({ Notes }) {
     if (!Notes || Notes.length === 0) {
         return (
@@ -14,6 +16,7 @@ function NotesList({ Notes }) {
     const change_note_popup = (note_id) => {
         setNote_popup(note_id);
     };
+
     return (
         <div className="p-6">
             <ul className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -25,13 +28,15 @@ function NotesList({ Notes }) {
                     />
                 ))}
             </ul>
-            {note_popup && (
-                <Note_PopUp
-                    note_id={note_popup}
-                    setNote_popup={setNote_popup}
-                    Notes={Notes}
-                />
-            )}
+            <AnimatePresence>
+                {note_popup && (
+                    <Note_PopUp
+                        note_id={note_popup}
+                        setNote_popup={setNote_popup}
+                        Notes={Notes}
+                    />
+                )}
+            </AnimatePresence>
         </div>
     );
 }

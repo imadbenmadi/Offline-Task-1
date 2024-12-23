@@ -1,11 +1,22 @@
 import React from "react";
+import { motion } from "framer-motion";
 
 function Note_PopUp({ note_id, setNote_popup, Notes }) {
     const note = Notes.find((n) => n.id === note_id);
 
     return (
-        <div className="fixed inset-0 min-h-[200px] bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+        <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+        >
+            <motion.div
+                initial={{ scale: 0.8 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0.8 }}
+                className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full"
+            >
                 {/* Close Button */}
                 <button
                     className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
@@ -42,8 +53,8 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                         Invalid note type!
                     </p>
                 )}
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }
 
