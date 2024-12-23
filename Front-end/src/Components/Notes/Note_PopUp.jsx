@@ -3,32 +3,21 @@ import React from "react";
 function Note_PopUp({ note_id, setNote_popup, Notes }) {
     const note = Notes.find((n) => n.id === note_id);
 
-    if (!note) {
-        return (
-            <div>
-                <button
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
-                    onClick={() => setNote_popup(false)}
-                >
-                    ✕
-                </button>
-                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
-                    <p className="text-red-500">Invalid note!</p>
-                </div>
-            </div>
-        );
-    }
-
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <div className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                {/* Close Button */}
                 <button
-                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800 focus:outline-none"
                     onClick={() => setNote_popup(false)}
                 >
                     ✕
                 </button>
-                {note.type === "text" ? (
+
+                {/* Content */}
+                {!note ? (
+                    <p className="text-red-500 text-center">Invalid note!</p>
+                ) : note.type === "text" ? (
                     <div>
                         <h2 className="text-xl font-bold text-gray-800">
                             {note.Title}
@@ -37,6 +26,9 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                     </div>
                 ) : note.type === "audio" ? (
                     <div>
+                        <h2 className="text-xl font-bold text-gray-800">
+                            {note.Title}
+                        </h2>
                         <audio
                             controls
                             className="mt-4 w-full"
@@ -46,7 +38,9 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                         </audio>
                     </div>
                 ) : (
-                    <p className="text-red-500">Invalid note type!</p>
+                    <p className="text-red-500 text-center">
+                        Invalid note type!
+                    </p>
                 )}
             </div>
         </div>
