@@ -4,7 +4,19 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
     const note = Notes.find((n) => n.id === note_id);
 
     if (!note) {
-        return null;
+        return (
+            <div>
+                <button
+                    className="absolute top-4 right-4 text-gray-600 hover:text-gray-800"
+                    onClick={() => setNote_popup(false)}
+                >
+                    ✕
+                </button>
+                <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+                    <p className="text-red-500">Invalid note!</p>
+                </div>
+            </div>
+        );
     }
 
     return (
@@ -19,19 +31,16 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                 {note.type === "text" ? (
                     <div>
                         <h2 className="text-xl font-bold text-gray-800">
-                            {note.title}
+                            {note.Title}
                         </h2>
-                        <p className="mt-4 text-gray-600">{note.description}</p>
+                        <p className="mt-4 text-gray-600">{note.Description}</p>
                     </div>
                 ) : note.type === "audio" ? (
                     <div>
-                        <h2 className="text-xl font-bold text-gray-800">
-                            {note.title}
-                        </h2>
                         <audio
                             controls
                             className="mt-4 w-full"
-                            src={note.audioUrl}
+                            src={note.Audio_Link}
                         >
                             Your browser does not support the audio element.
                         </audio>
