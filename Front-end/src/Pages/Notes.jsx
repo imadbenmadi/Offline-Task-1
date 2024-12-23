@@ -2,25 +2,23 @@ import React, { useState, useEffect } from "react";
 import NotesList from "../Components/Notes/NotesList";
 import Input from "../Components/Notes/Input";
 import { motion, AnimatePresence } from "framer-motion";
-
+import axios from "axios";
 function Notes() {
     const [Notes, setNotes] = useState([]);
     const [showInput, setShowInput] = useState(false);
 
     useEffect(() => {
-        fetch("http://localhost:3000/Notes", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            withCredentials: true,
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data?.status === "success") {
-                    setNotes(data.data.Notes);
-                }
-            });
+        const fetchNotes = async () => {
+            try {
+                let res = await axios.get("http://localhost:3000/Notes", {
+                    withCredentials: true,
+                });
+                setNotes(res.data);
+            } catch (error) {
+                console.error("Error fetching notes:", error);
+            }
+        };
+        fetchNotes();
     }, []);
 
     return (
