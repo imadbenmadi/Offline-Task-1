@@ -8,7 +8,7 @@ const post_note = async ({ audioBlob, setAudioBlob, setNotes }) => {
     const formData = new FormData();
 
     if (audioBlob != null) {
-        formData.append("voice_note", audioBlob, "recording.webm");
+        formData.append("voice_note", audioBlob);
         formData.append("type", "audio");
     } else {
         formData.append("Title", Title);
@@ -20,7 +20,8 @@ const post_note = async ({ audioBlob, setAudioBlob, setNotes }) => {
             withCredentials: true,
             validateStatus: () => true,
         });
-
+        console.log(res);
+        
         if (res.status === 200) {
             Swal.fire("Success", "Note added successfully", "success");
             setNotes((prev) => [res.data, ...prev]);

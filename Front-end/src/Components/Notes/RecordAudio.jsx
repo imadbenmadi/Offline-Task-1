@@ -1,9 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import Swal from "sweetalert2";
-
-const RecordAudioWithLiveWaves = () => {
+import post_note from "../../API_Calls/post_note";
+const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
     const [isRecording, setIsRecording] = useState(false);
-    const [audioBlob, setAudioBlob] = useState(null);
+    // const [audioBlob, setAudioBlob] = useState(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
     const canvasRef = useRef(null);
@@ -210,7 +210,10 @@ const RecordAudioWithLiveWaves = () => {
                     </audio>
                     <div className="flex justify-center gap-4 mt-4">
                         <button
-                            onClick={submitAudio}
+                            // onClick={submitAudio}
+                            onClick={() =>
+                                post_note({ audioBlob, setAudioBlob, setNotes })
+                            }
                             className="px-4 py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition"
                         >
                             Submit

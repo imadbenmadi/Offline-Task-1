@@ -49,7 +49,11 @@ function Input({ setNotes }) {
             {showAudioPopup && (
                 <div className="fixed inset-0  flex items-center justify-center shadow-lg bg-gray-900 bg-opacity-50">
                     <div className="bg-white rounded-lg p-6 space-y-4  max-w-sm w-full">
-                        <RecordAudio setAudioBlob={setAudioBlob} />
+                        <RecordAudio
+                            setAudioBlob={setAudioBlob}
+                            audioBlob={audioBlob}
+                            setNotes={setNotes}
+                        />
                         <button
                             onClick={toggleAudioPopup}
                             className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition w-full"
