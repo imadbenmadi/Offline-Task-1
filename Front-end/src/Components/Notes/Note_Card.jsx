@@ -8,7 +8,9 @@ function NoteCard({ Note, change_note_popup }) {
     return (
         <li
             className="border cursor-pointer rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]"
-            onClick={() => change_note_popup(Note.id)}
+            onClick={() => {
+                if (Note.type === "text") change_note_popup(Note.id);
+            }}
         >
             <div className="p-4 flex flex-col justify-between h-full">
                 {Note.type === "audio" ? (

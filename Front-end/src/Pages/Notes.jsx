@@ -16,7 +16,7 @@ function Notes() {
         <div className="relative  w-full overflow-auto">
             {/* Notes List */}
             <div className="mt-6">
-                <NotesList Notes={Notes} />
+                <NotesList Notes={Notes} setNotes={setNotes} />
             </div>
 
             {/* Floating Button */}
@@ -34,7 +34,7 @@ function Notes() {
             >
                 <button
                     onClick={() => setShowInput(!showInput)}
-                    className="bg-blue-500 text-white p-4 rounded-full shadow-xl hover:bg-blue-600 transition font-semibold" 
+                    className="bg-blue-500 text-white p-4 rounded-full shadow-xl hover:bg-blue-600 transition font-semibold"
                 >
                     {showInput ? "Close" : "Add Note"}
                 </button>

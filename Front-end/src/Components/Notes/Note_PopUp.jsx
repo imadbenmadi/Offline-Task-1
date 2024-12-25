@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
-
-function Note_PopUp({ note_id, setNote_popup, Notes }) {
+import Edit_Note from "../../API_Calls/Edit_Note";
+function Note_PopUp({ note_id, setNote_popup, Notes, setNotes: setNotes }) {
     const note = Notes.find((n) => n.id === note_id);
 
     const [isEditing, setIsEditing] = useState(false);
@@ -96,7 +96,14 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                             {isEditing ? (
                                 <>
                                     <button
-                                        onClick={handleEditSubmit}
+                                        onClick={() =>
+                                            Edit_Note({
+                                                Title: editTitle,
+                                                Description: editDescription,
+                                                Note: note,
+                                                setNotes: setNotes,
+                                            })
+                                        }
                                         className="px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 focus:outline-none"
                                     >
                                         Submit

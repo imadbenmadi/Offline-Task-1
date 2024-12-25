@@ -1,18 +1,19 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const Edite_Note = async ({ setNotes }) => {
-    const Title = document.getElementById("Title").value || "UnTitled";
-    const Description = document.getElementById("Description").value || "";
-
+const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
+    if (Note?.type !== "text") {
+        console.error("Invalid note type");
+        return;
+    }
     const formData = new FormData();
 
     if (Title) formData.append("Title", Title);
-    formData.append("Description", Description);
+    if (Description) formData.append("Description", Description);
     formData.append("type", "text");
 
     try {
-        let res = await Axios.post("http://localhost:3000/Notes", formData, {
+        let res = await Axios.put("http://localhost:3000/Notes", formData, {
             headers: { "Content-Type": "multipart/form-data" },
             withCredentials: true,
             validateStatus: () => true,
@@ -20,14 +21,14 @@ const Edite_Note = async ({ setNotes }) => {
         console.log(res);
 
         if (res.status === 200) {
-            Swal.fire("Success", "Note added successfully", "success");
+            Swal.fire("Success", "Note edited successfully", "success");
             setNotes((prev) => [res.data, ...prev]);
             setAudioBlob(null); // Clear the audioBlob after submission
         } else {
-            Swal.fire("Error", "Failed to add note", "error");
+            Swal.fire("Error", "Failed to edit note", "error");
         }
     } catch (error) {
         console.error("Error submitting note:", error);
     }
 };
-export default Edite_Note;
+export default Edit_Note;

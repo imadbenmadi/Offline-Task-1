@@ -4,7 +4,7 @@ import { useState } from "react";
 import Note_PopUp from "./Note_PopUp";
 import { AnimatePresence } from "framer-motion";
 
-function NotesList({ Notes }) {
+function NotesList({ Notes, setNotes }) {
     if (!Notes || Notes.length === 0) {
         return (
             <div className="text-center pt-12 text-gray-700 mt-10">
@@ -35,6 +35,7 @@ function NotesList({ Notes }) {
                             note_id={note_popup}
                             setNote_popup={setNote_popup}
                             Notes={Notes}
+                            setNotes={setNotes}
                         />
                     </div>
                 )}
