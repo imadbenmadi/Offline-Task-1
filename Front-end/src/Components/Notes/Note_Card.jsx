@@ -13,6 +13,10 @@ function NoteCard({ Note, change_note_popup }) {
             <div className="p-4 flex flex-col justify-between h-full">
                 {Note.type === "audio" ? (
                     <div>
+                        {" "}
+                        <h4 className="text-lg font-semibold text-gray-700 mb-3 text-center">
+                            Audio Note 🎧
+                        </h4>
                         <Audio_player url={Note.Audio_Link} />
                     </div>
                 ) : Note.type === "text" ? (

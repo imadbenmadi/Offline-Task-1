@@ -6,7 +6,8 @@ import post_note from "../../API_Calls/post_note";
 function Input({ setNotes }) {
     const [showAudioPopup, setShowAudioPopup] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
-
+    const [Title, setTitle] = useState("");
+    const [Description, setDescription] = useState("");
     const toggleAudioPopup = () => {
         setShowAudioPopup(!showAudioPopup);
     };
@@ -19,12 +20,14 @@ function Input({ setNotes }) {
                     type="text"
                     id="Title"
                     placeholder="Title"
+                    onChange={(e) => setTitle(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <textarea
                     id="Description"
                     placeholder="Type your message..."
                     rows="4"
+                    onChange={(e) => setDescription(e.target.value)}
                     className="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 ></textarea>
                 <div className="flex justify-between items-center space-x-4">
@@ -36,7 +39,13 @@ function Input({ setNotes }) {
                     </button>
                     <button
                         onClick={() =>
-                            post_note({ audioBlob, setAudioBlob, setNotes })
+                            post_note({
+                                Title,
+                                Description,
+                                audioBlob,
+                                setAudioBlob,
+                                setNotes,
+                            })
                         }
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
                     >

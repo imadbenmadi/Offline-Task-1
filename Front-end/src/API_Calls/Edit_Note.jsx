@@ -1,26 +1,15 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const post_note = async ({
-    Title,
-    Description,
-    audioBlob,
-    setAudioBlob,
-    setNotes,
-}) => {
-    // const Title = document.getElementById("Title").value || "UnTitled";
-    // const Description = document.getElementById("Description").value || "";
+const Edite_Note = async ({ setNotes }) => {
+    const Title = document.getElementById("Title").value || "UnTitled";
+    const Description = document.getElementById("Description").value || "";
 
     const formData = new FormData();
 
-    if (audioBlob != null) {
-        formData.append("voice_note", audioBlob, "recording.webm");
-        formData.append("type", "audio");
-    } else {
-        formData.append("Title", Title);
-        formData.append("Description", Description);
-        formData.append("type", "text");
-    }
+    if (Title) formData.append("Title", Title);
+    formData.append("Description", Description);
+    formData.append("type", "text");
 
     try {
         let res = await Axios.post("http://localhost:3000/Notes", formData, {
@@ -41,4 +30,4 @@ const post_note = async ({
         console.error("Error submitting note:", error);
     }
 };
-export default post_note;
+export default Edite_Note;

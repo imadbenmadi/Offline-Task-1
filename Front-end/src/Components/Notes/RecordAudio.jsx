@@ -45,46 +45,38 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
     };
 
     return (
-        <div className="max-w-sm mx-auto p-4 bg-white shadow-md rounded-lg">
-            <h1 className="text-xl font-bold text-gray-800 text-center">
-                Voice Recorder
-            </h1>
-
-            <div className="flex justify-center mt-6">
-                {!isRecording ? (
-                    <button
-                        onClick={startRecording}
-                        className="bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition"
-                    >
-                        <FaMicrophone size={24} />
-                    </button>
-                ) : (
-                    <button
-                        onClick={stopRecording}
-                        className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
-                    >
-                        <FaStop size={24} />
-                    </button>
-                )}
-            </div>
+        <div className="max-w-sm mx-auto p-4 bg-white  rounded-lg">
+            {!audioBlob && (
+                <>
+                    <h1 className="text-xl font-bold text-gray-800 text-center">
+                        Voice Recorder
+                    </h1>
+                    <div className="flex justify-center mt-6">
+                        {!isRecording ? (
+                            <button
+                                onClick={startRecording}
+                                className="bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition"
+                            >
+                                <FaMicrophone size={24} />
+                            </button>
+                        ) : (
+                            <button
+                                onClick={stopRecording}
+                                className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
+                            >
+                                <FaStop size={24} />
+                            </button>
+                        )}
+                    </div>
+                </>
+            )}
 
             {audioBlob && (
                 <div className="mt-6">
                     <h2 className="text-lg font-semibold text-gray-800 text-center">
                         Recorded Audio
                     </h2>
-                    <div className="w-full max-w-lg">
-                        <audio
-                            controls
-                            className="w-full rounded-lg bg-gray-100 shadow-inner focus:outline-none"
-                        >
-                            <source
-                                src={URL.createObjectURL(audioBlob)}
-                                type="audio/webm"
-                            />
-                            Your browser does not support the audio element.
-                        </audio>
-                    </div>
+                    <Audio_player url={URL.createObjectURL(audioBlob)} />
                     <div className="flex justify-between mt-4">
                         <button
                             onClick={() =>
