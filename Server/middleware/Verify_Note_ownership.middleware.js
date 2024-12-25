@@ -18,6 +18,7 @@ const Verify_Note_ownership = async (req, res, next) => {
             });
         }
         req.decoded = decoded;
+        req.Note = Note;
         return next();
     } catch (err) {
         console.log(err);

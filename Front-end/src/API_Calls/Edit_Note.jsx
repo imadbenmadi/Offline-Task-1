@@ -2,6 +2,10 @@ import Axios from "axios";
 import Swal from "sweetalert2";
 
 const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
+    if (!Note) {
+        console.error("Note not found");
+        return;
+    }
     if (Note?.type !== "text") {
         console.error("Invalid note type");
         return;
@@ -13,11 +17,14 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
     formData.append("type", "text");
 
     try {
-        let res = await Axios.put("http://localhost:3000/Notes", formData, {
-            headers: { "Content-Type": "multipart/form-data" },
-            withCredentials: true,
-            validateStatus: () => true,
-        });
+        let res = await Axios.put(
+            `http://localhost:3000/Notes/${Note.id}`,
+            { Title, Description },
+            {
+                withCredentials: true,
+                validateStatus: () => true,
+            }
+        );
         console.log(res);
 
         if (res.status === 200) {
