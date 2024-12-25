@@ -18,12 +18,26 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
     const [audioChunks, setAudioChunks] = useState([]);
     const [elapsedTime, setElapsedTime] = useState(0); // Track elapsed time
     const [timer, setTimer] = useState(null); // Reference for the timer
-
     const startRecording = async () => {
         try {
+            const micPermission = await navigator.permissions.query({
+                name: "microphone",
+            });
+
+            if (micPermission.state === "denied") {
+                Swal.fire(
+                    "Microphone Access Blocked",
+                    "Please reset microphone permissions in your browser settings and reload the page.",
+                    "error"
+                );
+                return;
+            }
+
+            // If the state is "prompt", calling getUserMedia will show the popup again
             const stream = await navigator.mediaDevices.getUserMedia({
                 audio: true,
             });
+
             const recorder = new MediaRecorder(stream);
             setMediaRecorder(recorder);
 
@@ -40,9 +54,10 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
             setIsRecording(true);
             startTimer(); // Start the timer
         } catch (error) {
-            Swal.fire("Error", "Failed to start recording", "error");
+            console.error("Error accessing microphone:", error);
         }
     };
+
 
     const pauseRecording = () => {
         if (mediaRecorder && mediaRecorder.state === "recording") {
