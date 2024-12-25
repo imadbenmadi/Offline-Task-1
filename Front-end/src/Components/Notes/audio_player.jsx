@@ -1,6 +1,6 @@
 import React from "react";
 
-function audio_player({ Note }) {
+function audio_player({ url }) {
     return (
         <div className="bg-gray-50  rounded-lg p-4 flex flex-col items-center">
             {/* Note Title */}
@@ -14,7 +14,7 @@ function audio_player({ Note }) {
                     controls
                     className="w-full rounded-lg bg-gray-100 shadow-inner focus:outline-none"
                 >
-                    <source src={`${Note.Audio_Link}`} type="audio/webm" />
+                    <source src={`${url}`} type="audio/webm" />
                     Your browser does not support the audio element.
                 </audio>
             </div>
