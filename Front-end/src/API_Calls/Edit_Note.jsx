@@ -2,7 +2,9 @@ import Axios from "axios";
 import Swal from "sweetalert2";
 
 const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
-    if (!Note) {
+    console.log("ze ar in edit note");
+
+    if (!Note || !Note.id) {
         console.error("Note not found");
         return;
     }
@@ -10,11 +12,6 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
         console.error("Invalid note type");
         return;
     }
-    const formData = new FormData();
-
-    if (Title) formData.append("Title", Title);
-    if (Description) formData.append("Description", Description);
-    formData.append("type", "text");
 
     try {
         let res = await Axios.put(

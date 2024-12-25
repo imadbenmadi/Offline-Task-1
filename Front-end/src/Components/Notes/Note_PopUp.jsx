@@ -1,9 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import Edit_Note from "../../API_Calls/Edit_Note";
-function Note_PopUp({ note_id, setNote_popup, Notes, setNotes: setNotes }) {
-    const note = Notes.find((n) => n.id === note_id);
+import Swal from "sweetalert2";
+function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
+    const [note, setNote] = useState(null);
+    useEffect(() => {
+        if (!note_id) {
+            Swal.fire("Error", "Invalid note id", "error");
+            setNote_popup(false);
+        }
+        note_id = parseInt(note_id);
+        setNote(Notes.find((n) => n.id === note_id));
+    }, [note_id, setNote_popup]);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editTitle, setEditTitle] = useState(note?.Title || "");
@@ -13,12 +22,6 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes: setNotes }) {
 
     const handleEditToggle = () => {
         setIsEditing((prev) => !prev);
-    };
-
-    const handleEditSubmit = () => {
-        console.log("Submit updated note:", { editTitle, editDescription });
-        // Add API call or state update logic here
-        setIsEditing(false);
     };
 
     const handleEditCancel = () => {
