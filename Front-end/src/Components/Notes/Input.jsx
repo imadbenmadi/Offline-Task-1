@@ -3,7 +3,7 @@ import RecordAudio from "./RecordAudio";
 import Axios from "axios";
 import Swal from "sweetalert2";
 import post_note from "../../API_Calls/post_note";
-function Input({ setNotes }) {
+function Input({ setNotes, setShowInput }) {
     const [showAudioPopup, setShowAudioPopup] = useState(false);
     const [audioBlob, setAudioBlob] = useState(null);
     const [Title, setTitle] = useState("");
@@ -45,6 +45,7 @@ function Input({ setNotes }) {
                                 audioBlob,
                                 setAudioBlob,
                                 setNotes,
+                                setShowInput,
                             })
                         }
                         className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"

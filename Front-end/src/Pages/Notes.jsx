@@ -50,7 +50,10 @@ function Notes() {
                         exit={{ y: "100%" }}
                         transition={{ duration: 0.3 }}
                     >
-                        <Input setNotes={setNotes} />
+                        <Input
+                            setNotes={setNotes}
+                            setShowInput={setShowInput}
+                        />
                     </motion.div>
                 )}
             </AnimatePresence>

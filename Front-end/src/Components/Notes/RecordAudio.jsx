@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { FaMicrophone, FaStop, FaTrash, FaPaperPlane } from "react-icons/fa";
 import Swal from "sweetalert2";
 import post_note from "../../API_Calls/post_note";
@@ -41,7 +41,7 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
 
     const deleteRecording = () => {
         setAudioBlob(null);
-        Swal.fire("Deleted", "Recording has been deleted", "info");
+        // Swal.fire("Deleted", "Recording has been deleted", "info");
     };
 
     return (

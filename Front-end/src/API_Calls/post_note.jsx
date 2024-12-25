@@ -7,6 +7,7 @@ const post_note = async ({
     audioBlob,
     setAudioBlob,
     setNotes,
+    setShowInput,
 }) => {
     // const Title = document.getElementById("Title").value || "UnTitled";
     // const Description = document.getElementById("Description").value || "";
@@ -17,6 +18,10 @@ const post_note = async ({
         formData.append("voice_note", audioBlob, "recording.webm");
         formData.append("type", "audio");
     } else {
+        if (!Title) {
+            Swal.fire("Error", "Title is required", "error");
+            return;
+        }
         formData.append("Title", Title);
         formData.append("Description", Description);
         formData.append("type", "text");
@@ -28,12 +33,12 @@ const post_note = async ({
             withCredentials: true,
             validateStatus: () => true,
         });
-        
 
         if (res.status === 200) {
             Swal.fire("Success", "Note added successfully", "success");
             setNotes((prev) => [res.data, ...prev]);
             setAudioBlob(null); // Clear the audioBlob after submission
+            setShowInput(false);
         } else if (res.status === 401) {
             window.location.href = "/";
         } else {
