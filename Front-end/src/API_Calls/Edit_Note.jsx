@@ -2,13 +2,12 @@ import Axios from "axios";
 import Swal from "sweetalert2";
 
 const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
-
     if (!Note || !Note.id) {
-        console.error("Note not found");
+        Swal.fire("Error", "Note not found", "error");
         return;
     }
     if (Note?.type !== "text") {
-        console.error("Invalid note type");
+        Swal.fire("Error", "Can only update text notes", "error");
         return;
     }
 
@@ -21,7 +20,6 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
                 validateStatus: () => true,
             }
         );
-        console.log(res);
 
         if (res.status === 200) {
             Swal.fire("Success", "Note edited successfully", "success");
@@ -33,7 +31,7 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
             Swal.fire("Error", "Failed to edit note", "error");
         }
     } catch (error) {
-        console.error("Error submitting note:", error);
+        Swal.fire("Error", "Failed to edit note", "error");
     }
 };
 export default Edit_Note;

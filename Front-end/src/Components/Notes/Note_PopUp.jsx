@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import Edit_Note from "../../API_Calls/Edit_Note";
+import Delete_Note from "../../API_Calls/Delete_Note";
 import Swal from "sweetalert2";
 
 function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
@@ -46,13 +47,8 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
             setIsEditing(false);
             setNote_popup(false); // Close popup after editing
         } catch (error) {
-            console.error("Error editing note:", error);
+            Swal.fire("Error", "Failed to edit note", "error");
         }
-    };
-
-    const handleDelete = () => {
-        console.log("Delete button clicked for note:", note);
-        // Add delete logic here
     };
 
     return (
@@ -142,7 +138,12 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                                             </button>
                                         )}
                                         <button
-                                            onClick={handleDelete}
+                                            onClick={() => {
+                                                Delete_Note({
+                                                    Note: note,
+                                                    setNotes,
+                                                });
+                                            }}
                                             className="px-4 py-2 bg-red-600 text-white rounded-md shadow-md hover:bg-red-700 focus:outline-none"
                                         >
                                             Delete

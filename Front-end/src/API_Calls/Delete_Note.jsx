@@ -3,7 +3,7 @@ import Swal from "sweetalert2";
 
 const Delete_Note = async ({ Note, setNotes }) => {
     if (!Note || !Note.id) {
-        console.error("Note not found");
+        Swal.fire("Error", "Note not found", "error");
         return;
     }
 
@@ -28,7 +28,7 @@ const Delete_Note = async ({ Note, setNotes }) => {
             Swal.fire("Error", "Failed to Delet note", "error");
         }
     } catch (error) {
-        console.error("Error submitting note:", error);
+        Swal.fire("Error", "Failed to Delet note", "error");
     }
 };
 export default Delete_Note;

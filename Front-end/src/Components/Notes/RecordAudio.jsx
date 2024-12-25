@@ -28,7 +28,7 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
             recorder.start();
             setIsRecording(true);
         } catch (error) {
-            console.error("Error accessing microphone:", error);
+            Swal.fire("Error", "Failed to start recording", "error");
         }
     };
 

@@ -59,7 +59,7 @@ const RecordAudioWithLiveWaves = () => {
             recorder.start();
             setIsRecording(true);
         } catch (error) {
-            console.error("Error accessing microphone:", error);
+            Swal.fire("Error", "Error accessing microphone.", "error");
         }
     };
 
@@ -153,7 +153,7 @@ const RecordAudioWithLiveWaves = () => {
                 );
             }
         } catch (error) {
-            console.error("Error transcribing audio:", error);
+            Swal.fire("Error", "Failed to transcribe audio.", "error");
         }
     };
 

@@ -28,7 +28,7 @@ const post_note = async ({
             withCredentials: true,
             validateStatus: () => true,
         });
-        console.log(res);
+        
 
         if (res.status === 200) {
             Swal.fire("Success", "Note added successfully", "success");
@@ -40,7 +40,7 @@ const post_note = async ({
             Swal.fire("Error", "Failed to add note", "error");
         }
     } catch (error) {
-        console.error("Error submitting note:", error);
+        Swal.fire("Error", "Failed to add note", "error");
     }
 };
 export default post_note;
