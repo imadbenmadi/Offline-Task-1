@@ -8,7 +8,7 @@ const Notes = sequelize.define("Notes", {
         allowNull: true, // Optional field
     },
     Description: {
-        type: DataTypes.STRING,
+        type: DataTypes.TEXT,
         allowNull: true, // Conditional validation will handle this
         validate: {
             customValidation(value) {
