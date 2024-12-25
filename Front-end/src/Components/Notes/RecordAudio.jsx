@@ -120,35 +120,7 @@ const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
         }
     };
 
-    const submitAudio = async () => {
-        if (!audioBlob) {
-            Swal.fire("Error", "No audio to submit.", "error");
-            return;
-        }
-
-        const formData = new FormData();
-        formData.append("vocal", audioBlob, "recording.webm");
-
-        try {
-            const response = await fetch("/vocals", {
-                method: "POST",
-                body: formData,
-            });
-
-            if (response.ok) {
-                Swal.fire(
-                    "Success",
-                    "Audio submitted successfully.",
-                    "success"
-                );
-                deleteRecording();
-            } else {
-                Swal.fire("Error", "Failed to submit audio.", "error");
-            }
-        } catch (error) {
-            console.error("Error submitting audio:", error);
-        }
-    };
+    
 
     const deleteRecording = () => {
         setAudioBlob(null);
