@@ -3,31 +3,51 @@ import { motion } from "framer-motion";
 import dayjs from "dayjs";
 import Edit_Note from "../../API_Calls/Edit_Note";
 import Swal from "sweetalert2";
+
 function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
     const [note, setNote] = useState(null);
+
     useEffect(() => {
         if (!note_id) {
             Swal.fire("Error", "Invalid note id", "error");
             setNote_popup(false);
+            return;
         }
-        note_id = parseInt(note_id);
-        setNote(Notes.find((n) => n.id === note_id));
-    }, [note_id, setNote_popup]);
+        setNote(Notes.find((n) => n.id === parseInt(note_id)));
+    }, [note_id, Notes, setNote_popup]);
 
     const [isEditing, setIsEditing] = useState(false);
-    const [editTitle, setEditTitle] = useState(note?.Title || "");
-    const [editDescription, setEditDescription] = useState(
-        note?.Description || ""
-    );
+    const [editTitle, setEditTitle] = useState("");
+    const [editDescription, setEditDescription] = useState("");
 
-    const handleEditToggle = () => {
-        setIsEditing((prev) => !prev);
-    };
+    useEffect(() => {
+        if (note) {
+            setEditTitle(note.Title);
+            setEditDescription(note.Description);
+        }
+    }, [note]);
+
+    const handleEditToggle = () => setIsEditing((prev) => !prev);
 
     const handleEditCancel = () => {
         setEditTitle(note?.Title || "");
         setEditDescription(note?.Description || "");
         setIsEditing(false);
+    };
+
+    const handleSubmit = async () => {
+        try {
+            await Edit_Note({
+                Title: editTitle,
+                Description: editDescription,
+                Note: note,
+                setNotes,
+            });
+            setIsEditing(false);
+            setNote_popup(false); // Close popup after editing
+        } catch (error) {
+            console.error("Error editing note:", error);
+        }
     };
 
     const handleDelete = () => {
@@ -46,9 +66,8 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.8 }}
-                className="relative bg-white p-12 rounded-lg shadow-lg max-w-md w-full overflow-auto h-full "
+                className="relative bg-white p-12 rounded-lg shadow-lg max-w-md w-full overflow-auto h-full"
             >
-                {/* Close Button */}
                 <button
                     className="absolute top-4 right-4 text-gray-600 font-bold hover:text-gray-800 focus:outline-none"
                     onClick={() => setNote_popup(false)}
@@ -56,12 +75,10 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                     ✕
                 </button>
 
-                {/* Content */}
                 {!note ? (
                     <p className="text-red-500 text-center">Invalid note!</p>
                 ) : (
                     <div className="flex flex-col justify-between h-full">
-                        {/* Note Content */}
                         {isEditing ? (
                             <div>
                                 <input
@@ -92,21 +109,11 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                             </div>
                         )}
 
-                        {/* Date */}
-
-                        {/* Buttons */}
                         <div className="flex justify-between items-center mt-2">
                             {isEditing ? (
                                 <>
                                     <button
-                                        onClick={() =>
-                                            Edit_Note({
-                                                Title: editTitle,
-                                                Description: editDescription,
-                                                Note: note,
-                                                setNotes: setNotes,
-                                            })
-                                        }
+                                        onClick={handleSubmit}
                                         className="px-4 py-2 bg-green-600 text-white rounded-md shadow-md hover:bg-green-700 focus:outline-none"
                                     >
                                         Submit
@@ -120,14 +127,12 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                                 </>
                             ) : (
                                 <div className="w-full">
-                                    <div className=" text-end my-4">
-                                        <p className="text-xs font-semibold text-gray-500 text-right mt-6">
-                                            {dayjs(note.createdAt).format(
-                                                "DD-MMM-YYYY"
-                                            )}
-                                        </p>
-                                    </div>
-                                    <div className=" flex justify-center gap-6 items-center mt-4">
+                                    <p className="text-xs font-semibold text-gray-500 text-right mt-6">
+                                        {dayjs(note.createdAt).format(
+                                            "DD-MMM-YYYY"
+                                        )}
+                                    </p>
+                                    <div className="flex justify-center gap-6 items-center mt-4">
                                         {note.type === "text" && (
                                             <button
                                                 onClick={handleEditToggle}

@@ -34,6 +34,8 @@ const post_note = async ({
             Swal.fire("Success", "Note added successfully", "success");
             setNotes((prev) => [res.data, ...prev]);
             setAudioBlob(null); // Clear the audioBlob after submission
+        } else if (res.status === 401) {
+            window.location.href = "/";
         } else {
             Swal.fire("Error", "Failed to add note", "error");
         }

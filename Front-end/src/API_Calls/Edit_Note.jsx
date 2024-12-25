@@ -28,6 +28,8 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
             Swal.fire("Success", "Note edited successfully", "success");
             setNotes((prev) => [res.data, ...prev]);
             setAudioBlob(null); // Clear the audioBlob after submission
+        } else if (res.status === 401) {
+            window.location.href = "/";
         } else {
             Swal.fire("Error", "Failed to edit note", "error");
         }
