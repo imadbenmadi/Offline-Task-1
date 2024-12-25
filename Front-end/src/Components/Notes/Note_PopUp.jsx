@@ -43,7 +43,7 @@ function Note_PopUp({ note_id, setNote_popup, Notes }) {
                 initial={{ scale: 0.8 }}
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.8 }}
-                className="relative bg-white p-6 rounded-lg shadow-lg max-w-md w-full overflow-auto h-full"
+                className="relative bg-white p-12 rounded-lg shadow-lg max-w-md w-full overflow-auto h-full "
             >
                 {/* Close Button */}
                 <button
