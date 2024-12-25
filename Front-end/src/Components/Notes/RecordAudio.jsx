@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
     FaMicrophone,
     FaStop,
@@ -13,9 +13,11 @@ import Audio_player from "./audio_player";
 
 const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
     const [isRecording, setIsRecording] = useState(false);
-    const [isPaused, setIsPaused] = useState(false); // Track pause state
+    const [isPaused, setIsPaused] = useState(false);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
+    const [elapsedTime, setElapsedTime] = useState(0); // Track elapsed time
+    const [timer, setTimer] = useState(null); // Reference for the timer
 
     const startRecording = async () => {
         try {
@@ -31,11 +33,12 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: "audio/webm" });
                 setAudioBlob(blob);
-                setAudioChunks([]); // Clear chunks after saving
+                setAudioChunks([]);
             };
 
             recorder.start();
             setIsRecording(true);
+            startTimer(); // Start the timer
         } catch (error) {
             Swal.fire("Error", "Failed to start recording", "error");
         }
@@ -45,6 +48,7 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
         if (mediaRecorder && mediaRecorder.state === "recording") {
             mediaRecorder.pause();
             setIsPaused(true);
+            pauseTimer(); // Pause the timer
         }
     };
 
@@ -52,6 +56,7 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
         if (mediaRecorder && mediaRecorder.state === "paused") {
             mediaRecorder.resume();
             setIsPaused(false);
+            startTimer(); // Resume the timer
         }
     };
 
@@ -59,13 +64,31 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
         if (mediaRecorder) {
             mediaRecorder.stop();
             setIsRecording(false);
-            setIsPaused(false); // Reset pause state
+            setIsPaused(false);
+            resetTimer(); // Reset the timer
         }
     };
 
     const deleteRecording = () => {
         setAudioBlob(null);
         Swal.fire("Deleted", "Recording has been deleted", "info");
+    };
+
+    // Timer management
+    const startTimer = () => {
+        const interval = setInterval(() => {
+            setElapsedTime((prev) => prev + 1);
+        }, 1000);
+        setTimer(interval);
+    };
+
+    const pauseTimer = () => {
+        if (timer) clearInterval(timer);
+    };
+
+    const resetTimer = () => {
+        if (timer) clearInterval(timer);
+        setElapsedTime(0);
     };
 
     return (
@@ -75,37 +98,54 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
                     <h1 className="text-xl font-bold text-gray-800 text-center">
                         Voice Recorder
                     </h1>
+
                     <div className="flex justify-center mt-6 gap-4">
                         {!isRecording ? (
-                            <button
-                                onClick={startRecording}
-                                className="bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition"
-                            >
-                                <FaMicrophone size={24} />
-                            </button>
+                            <>
+                                <button
+                                    onClick={startRecording}
+                                    className="bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition"
+                                >
+                                    <FaMicrophone size={24} />
+                                </button>
+                            </>
                         ) : (
                             <>
-                                {!isPaused ? (
-                                    <button
-                                        onClick={pauseRecording}
-                                        className="bg-yellow-500 text-white p-4 rounded-full shadow-lg hover:bg-yellow-600 transition"
-                                    >
-                                        <FaPause size={24} />
-                                    </button>
-                                ) : (
-                                    <button
-                                        onClick={resumeRecording}
-                                        className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition"
-                                    >
-                                        <FaPlay size={24} />
-                                    </button>
-                                )}
-                                <button
-                                    onClick={stopRecording}
-                                    className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
-                                >
-                                    <FaStop size={24} />
-                                </button>
+                                <div className=" flex flex-col items-center gap-4">
+                                    <div className=" flex items-center gap-4">
+                                        {!isPaused ? (
+                                            <button
+                                                onClick={pauseRecording}
+                                                className="bg-yellow-500 text-white p-4 rounded-full shadow-lg hover:bg-yellow-600 transition"
+                                            >
+                                                <FaPause size={24} />
+                                            </button>
+                                        ) : (
+                                            <button
+                                                onClick={resumeRecording}
+                                                className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition"
+                                            >
+                                                <FaPlay size={24} />
+                                            </button>
+                                        )}
+                                        <button
+                                            onClick={stopRecording}
+                                            className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
+                                        >
+                                            <FaStop size={24} />
+                                        </button>
+                                    </div>
+
+                                    <div className="text-center text-gray-600 mt-2 font-semibold">
+                                        {` ${Math.floor(elapsedTime / 60)
+                                            .toString()
+                                            .padStart(2, "0")}:${(
+                                            elapsedTime % 60
+                                        )
+                                            .toString()
+                                            .padStart(2, "0")}`}
+                                    </div>
+                                </div>
                             </>
                         )}
                     </div>
