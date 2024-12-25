@@ -57,12 +57,13 @@ function Input({ setNotes, setShowInput }) {
 
             {/* Audio Recording Popup */}
             {showAudioPopup && (
-                <div className="fixed inset-0  flex items-center justify-center shadow-lg bg-gray-900 bg-opacity-50">
+                <div id="recorder" className="fixed inset-0  flex items-center justify-center shadow-lg bg-gray-900 bg-opacity-50">
                     <div className="bg-white rounded-lg p-6 space-y-4  max-w-sm w-full">
                         <RecordAudio
                             setAudioBlob={setAudioBlob}
                             audioBlob={audioBlob}
                             setNotes={setNotes}
+                            setShowInput={setShowInput}
                         />
                         <button
                             onClick={toggleAudioPopup}

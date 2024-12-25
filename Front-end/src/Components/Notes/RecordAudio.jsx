@@ -1,10 +1,19 @@
 import React, { useState } from "react";
-import { FaMicrophone, FaStop, FaTrash, FaPaperPlane } from "react-icons/fa";
+import {
+    FaMicrophone,
+    FaStop,
+    FaTrash,
+    FaPaperPlane,
+    FaPause,
+    FaPlay,
+} from "react-icons/fa";
 import Swal from "sweetalert2";
 import post_note from "../../API_Calls/post_note";
 import Audio_player from "./audio_player";
-const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
+
+const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes, setShowInput }) => {
     const [isRecording, setIsRecording] = useState(false);
+    const [isPaused, setIsPaused] = useState(false); // Track pause state
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
 
@@ -22,7 +31,7 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: "audio/webm" });
                 setAudioBlob(blob);
-                setAudioChunks([]);
+                setAudioChunks([]); // Clear chunks after saving
             };
 
             recorder.start();
@@ -32,26 +41,41 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
         }
     };
 
+    const pauseRecording = () => {
+        if (mediaRecorder && mediaRecorder.state === "recording") {
+            mediaRecorder.pause();
+            setIsPaused(true);
+        }
+    };
+
+    const resumeRecording = () => {
+        if (mediaRecorder && mediaRecorder.state === "paused") {
+            mediaRecorder.resume();
+            setIsPaused(false);
+        }
+    };
+
     const stopRecording = () => {
         if (mediaRecorder) {
             mediaRecorder.stop();
             setIsRecording(false);
+            setIsPaused(false); // Reset pause state
         }
     };
 
     const deleteRecording = () => {
         setAudioBlob(null);
-        // Swal.fire("Deleted", "Recording has been deleted", "info");
+        Swal.fire("Deleted", "Recording has been deleted", "info");
     };
 
     return (
-        <div className="max-w-sm mx-auto p-4 bg-white  rounded-lg">
+        <div className="max-w-sm mx-auto p-4 bg-white rounded-lg">
             {!audioBlob && (
                 <>
                     <h1 className="text-xl font-bold text-gray-800 text-center">
                         Voice Recorder
                     </h1>
-                    <div className="flex justify-center mt-6">
+                    <div className="flex justify-center mt-6 gap-4">
                         {!isRecording ? (
                             <button
                                 onClick={startRecording}
@@ -60,12 +84,29 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
                                 <FaMicrophone size={24} />
                             </button>
                         ) : (
-                            <button
-                                onClick={stopRecording}
-                                className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
-                            >
-                                <FaStop size={24} />
-                            </button>
+                            <>
+                                {!isPaused ? (
+                                    <button
+                                        onClick={pauseRecording}
+                                        className="bg-yellow-500 text-white p-4 rounded-full shadow-lg hover:bg-yellow-600 transition"
+                                    >
+                                        <FaPause size={24} />
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={resumeRecording}
+                                        className="bg-blue-500 text-white p-4 rounded-full shadow-lg hover:bg-blue-600 transition"
+                                    >
+                                        <FaPlay size={24} />
+                                    </button>
+                                )}
+                                <button
+                                    onClick={stopRecording}
+                                    className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
+                                >
+                                    <FaStop size={24} />
+                                </button>
+                            </>
                         )}
                     </div>
                 </>
@@ -80,7 +121,12 @@ const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
                     <div className="flex justify-between mt-4">
                         <button
                             onClick={() =>
-                                post_note({ audioBlob, setAudioBlob, setNotes })
+                                post_note({
+                                    audioBlob,
+                                    setAudioBlob,
+                                    setNotes,
+                                    setShowInput,
+                                })
                             }
                             className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded shadow-md hover:bg-green-700 transition"
                         >

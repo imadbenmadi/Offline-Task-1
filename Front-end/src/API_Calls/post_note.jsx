@@ -18,8 +18,13 @@ const post_note = async ({
         formData.append("voice_note", audioBlob, "recording.webm");
         formData.append("type", "audio");
     } else {
-        if (!Title) {
-            Swal.fire("Error", "Title is required", "error");
+        if (
+            !Title ||
+            Title.trim() === "" ||
+            !Description ||
+            Description.trim() === ""
+        ) {
+            Swal.fire("Error", "Title and Description are required", "error");
             return;
         }
         formData.append("Title", Title);
@@ -38,6 +43,12 @@ const post_note = async ({
             Swal.fire("Success", "Note added successfully", "success");
             setNotes((prev) => [res.data, ...prev]);
             setAudioBlob(null); // Clear the audioBlob after submission
+            const recorderElement = document.getElementById("recorder");
+            if (recorderElement) {
+                recorderElement.style.backgroundColor = "white";
+            }
+            document.getElementById("Title").value = "";
+            document.getElementById("Description").value = "";
             setShowInput(false);
         } else if (res.status === 401) {
             window.location.href = "/";
@@ -45,6 +56,8 @@ const post_note = async ({
             Swal.fire("Error", "Failed to add note", "error");
         }
     } catch (error) {
+        console.log(error);
+
         Swal.fire("Error", "Failed to add note", "error");
     }
 };
