@@ -1,23 +1,12 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { FaMicrophone, FaStop, FaTrash, FaPaperPlane } from "react-icons/fa";
 import Swal from "sweetalert2";
 import post_note from "../../API_Calls/post_note";
-const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
+import Audio_player from "./audio_player";
+const AudioRecorder = ({ setAudioBlob, audioBlob, setNotes }) => {
     const [isRecording, setIsRecording] = useState(false);
-    // const [audioBlob, setAudioBlob] = useState(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     const [audioChunks, setAudioChunks] = useState([]);
-    const canvasRef = useRef(null);
-    const audioContextRef = useRef(null);
-    const analyserRef = useRef(null);
-    const dataArrayRef = useRef(null);
-    const animationIdRef = useRef(null);
-
-    useEffect(() => {
-        // Cleanup on unmount
-        return () => {
-            stopVisualization();
-        };
-    }, []);
 
     const startRecording = async () => {
         try {
@@ -27,31 +16,12 @@ const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
             const recorder = new MediaRecorder(stream);
             setMediaRecorder(recorder);
 
-            // Audio stream analysis setup
-            audioContextRef.current = new (window.AudioContext ||
-                window.webkitAudioContext)();
-            const source =
-                audioContextRef.current.createMediaStreamSource(stream);
-            analyserRef.current = audioContextRef.current.createAnalyser();
-            analyserRef.current.fftSize = 2048;
-
-            source.connect(analyserRef.current);
-
-            const bufferLength = analyserRef.current.frequencyBinCount;
-            dataArrayRef.current = new Uint8Array(bufferLength);
-
-            visualizeWaves();
-
             const chunks = [];
             recorder.ondataavailable = (e) => chunks.push(e.data);
 
             recorder.onstop = () => {
                 const blob = new Blob(chunks, { type: "audio/webm" });
                 setAudioBlob(blob);
-
-                // Stop visualizations
-                stopVisualization();
-
                 setAudioChunks([]);
             };
 
@@ -69,131 +39,67 @@ const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
         }
     };
 
-    const visualizeWaves = () => {
-        const canvas = canvasRef.current;
-        const canvasCtx = canvas.getContext("2d");
-        const analyser = analyserRef.current;
-        const dataArray = dataArrayRef.current;
-
-        const draw = () => {
-            animationIdRef.current = requestAnimationFrame(draw);
-            analyser.getByteTimeDomainData(dataArray);
-
-            canvasCtx.fillStyle = "#f3f4f6"; // Gray background
-            canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
-
-            canvasCtx.lineWidth = 2;
-            canvasCtx.strokeStyle = "#6366f1"; // Indigo waves
-            canvasCtx.beginPath();
-
-            const sliceWidth = (canvas.width * 1.0) / dataArray.length;
-            let x = 0;
-
-            for (let i = 0; i < dataArray.length; i++) {
-                const v = dataArray[i] / 128.0;
-                const y = (v * canvas.height) / 2;
-
-                if (i === 0) {
-                    canvasCtx.moveTo(x, y);
-                } else {
-                    canvasCtx.lineTo(x, y);
-                }
-
-                x += sliceWidth;
-            }
-
-            canvasCtx.lineTo(canvas.width, canvas.height / 2);
-            canvasCtx.stroke();
-        };
-
-        draw();
-    };
-
-    const stopVisualization = () => {
-        if (animationIdRef.current) {
-            cancelAnimationFrame(animationIdRef.current);
-        }
-
-        if (audioContextRef.current) {
-            audioContextRef.current.close();
-            audioContextRef.current = null;
-        }
-    };
-
-    
-
     const deleteRecording = () => {
         setAudioBlob(null);
-        stopVisualization();
+        Swal.fire("Deleted", "Recording has been deleted", "info");
     };
 
     return (
-        <div className="max-w-md mx-auto  bg-white  rounded-lg">
-            <h1 className="text-2xl font-bold text-gray-800 text-center">
-                Audio Recorder
+        <div className="max-w-sm mx-auto p-4 bg-white shadow-md rounded-lg">
+            <h1 className="text-xl font-bold text-gray-800 text-center">
+                Voice Recorder
             </h1>
 
-            {/* Waveform Visualization */}
-            <div className="mt-6 bg-gray-200 border border-gray-300 rounded-md h-40">
-                <canvas ref={canvasRef} className="w-full h-full"></canvas>
-            </div>
-
-            {/* Recording and Control Buttons */}
-            <div className="flex justify-center gap-4 mt-6">
-                <button
-                    onClick={startRecording}
-                    disabled={isRecording}
-                    className={`px-4 py-2 rounded-md font-semibold transition ${
-                        isRecording
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : "bg-indigo-500 text-white hover:bg-indigo-600"
-                    }`}
-                >
-                    Start Recording
-                </button>
-                <button
-                    onClick={stopRecording}
-                    disabled={!isRecording}
-                    className={`px-4 py-2 rounded-md font-semibold transition ${
-                        !isRecording
-                            ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                            : "bg-red-500 text-white hover:bg-red-600"
-                    }`}
-                >
-                    Stop Recording
-                </button>
-            </div>
-
-            {/* Playback, Submit, and Delete Buttons */}
-            {audioBlob && (
-                <div className="mt-8 text-center">
-                    <h3 className="text-lg font-semibold text-gray-700 mb-4">
-                        Playback
-                    </h3>
-                    <audio
-                        controls
-                        className="w-full border border-gray-300 rounded-md"
+            <div className="flex justify-center mt-6">
+                {!isRecording ? (
+                    <button
+                        onClick={startRecording}
+                        className="bg-indigo-600 text-white p-4 rounded-full shadow-lg hover:bg-indigo-700 transition"
                     >
-                        <source
-                            src={URL.createObjectURL(audioBlob)}
-                            type="audio/webm"
-                        />
-                        Your browser does not support the audio element.
-                    </audio>
-                    <div className="flex justify-center gap-4 mt-4">
+                        <FaMicrophone size={24} />
+                    </button>
+                ) : (
+                    <button
+                        onClick={stopRecording}
+                        className="bg-red-600 text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition"
+                    >
+                        <FaStop size={24} />
+                    </button>
+                )}
+            </div>
+
+            {audioBlob && (
+                <div className="mt-6">
+                    <h2 className="text-lg font-semibold text-gray-800 text-center">
+                        Recorded Audio
+                    </h2>
+                    <div className="w-full max-w-lg">
+                        <audio
+                            controls
+                            className="w-full rounded-lg bg-gray-100 shadow-inner focus:outline-none"
+                        >
+                            <source
+                                src={URL.createObjectURL(audioBlob)}
+                                type="audio/webm"
+                            />
+                            Your browser does not support the audio element.
+                        </audio>
+                    </div>
+                    <div className="flex justify-between mt-4">
                         <button
-                            // onClick={submitAudio}
                             onClick={() =>
                                 post_note({ audioBlob, setAudioBlob, setNotes })
                             }
-                            className="px-4 py-2 bg-green-500 text-white rounded-md font-semibold hover:bg-green-600 transition"
+                            className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded shadow-md hover:bg-green-700 transition"
                         >
+                            <FaPaperPlane />
                             Submit
                         </button>
                         <button
                             onClick={deleteRecording}
-                            className="px-4 py-2 bg-gray-500 text-white rounded-md font-semibold hover:bg-gray-600 transition"
+                            className="flex items-center gap-2 bg-gray-600 text-white px-4 py-2 rounded shadow-md hover:bg-gray-700 transition"
                         >
+                            <FaTrash />
                             Delete
                         </button>
                     </div>
@@ -203,4 +109,4 @@ const RecordAudioWithLiveWaves = ({ setAudioBlob, audioBlob, setNotes }) => {
     );
 };
 
-export default RecordAudioWithLiveWaves;
+export default AudioRecorder;
