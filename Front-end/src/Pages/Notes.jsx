@@ -34,7 +34,7 @@ function Notes() {
             >
                 <button
                     onClick={() => setShowInput(!showInput)}
-                    className="bg-blue-500 text-white p-4 rounded-full shadow-lg"
+                    className="bg-blue-500 text-white p-4 rounded-full shadow-xl hover:bg-blue-600 transition font-semibold" 
                 >
                     {showInput ? "Close" : "Add Note"}
                 </button>

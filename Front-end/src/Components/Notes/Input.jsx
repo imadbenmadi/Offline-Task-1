@@ -13,7 +13,7 @@ function Input({ setNotes }) {
     };
 
     return (
-        <div className="flex flex-col items-center w-screen bg-gray-100 py-6 px-4 rounded-lg">
+        <div className="flex flex-col items-center w-screen bg-gray-200 shadow-md py-6 px-4 rounded-lg">
             {/* Input Fields */}
             <div className="flex flex-col space-y-4 w-full max-w-3xl">
                 <input
