@@ -25,6 +25,8 @@ const Delete_Note = async ({ Note, setNotes }) => {
         } else if (res.status === 401) {
             window.location.href = "/";
         } else {
+            console.log(res);
+
             Swal.fire("Error", "Failed to Delet note", "error");
         }
     } catch (error) {
