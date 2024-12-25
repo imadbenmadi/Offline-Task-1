@@ -1,21 +1,16 @@
 import Axios from "axios";
 import Swal from "sweetalert2";
 
-const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
-
+const Delete_Note = async ({ Note, setNotes }) => {
     if (!Note || !Note.id) {
         console.error("Note not found");
         return;
     }
-    if (Note?.type !== "text") {
-        console.error("Invalid note type");
-        return;
-    }
 
     try {
-        let res = await Axios.put(
+        let res = await Axios.delete(
             `http://localhost:3000/Notes/${Note.id}`,
-            { Title, Description },
+            {},
             {
                 withCredentials: true,
                 validateStatus: () => true,
@@ -24,16 +19,16 @@ const Edit_Note = async ({ Title, Description, Note, setNotes }) => {
         console.log(res);
 
         if (res.status === 200) {
-            Swal.fire("Success", "Note edited successfully", "success");
-            setNotes((prev) => [res.data, ...prev]);
+            Swal.fire("Success", "Note Deleted successfully", "success");
+            setNotes((prev) => prev.filter((note) => note.id !== Note.id));
             setAudioBlob(null); // Clear the audioBlob after submission
         } else if (res.status === 401) {
             window.location.href = "/";
         } else {
-            Swal.fire("Error", "Failed to edit note", "error");
+            Swal.fire("Error", "Failed to Delet note", "error");
         }
     } catch (error) {
         console.error("Error submitting note:", error);
     }
 };
-export default Edit_Note;
+export default Delete_Note;
