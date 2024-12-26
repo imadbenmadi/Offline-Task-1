@@ -1,9 +1,9 @@
 import React from "react";
 import NoteCard from "./Note_Card";
 import { useState } from "react";
-import Text_Note_PopUp from "./Text_Note_PopUp";
+import Text_Note_PopUp from "./PopUp/Text_Note_PopUp";
 import { AnimatePresence } from "framer-motion";
-
+import Voice_Note_PopUp from "./PopUp/Voice_Note_PopUp";
 function NotesList({ Notes, setNotes }) {
     if (!Notes || Notes.length === 0) {
         return (
@@ -12,9 +12,13 @@ function NotesList({ Notes, setNotes }) {
             </div>
         );
     }
-    const [note_popup, setNote_popup] = useState(false);
-    const change_note_popup = (note_id) => {
-        setNote_popup(note_id);
+    const [text_note_popup, set_text_note_popup] = useState(false);
+    const change_text_note_popup = (note_id) => {
+        set_text_note_popup(note_id);
+    };
+    const [Voice_note_popup, set_Voice_note_popup] = useState(false);
+    const change_Voice_note_popup = (note_id) => {
+        set_Voice_note_popup(note_id);
     };
 
     return (
@@ -24,16 +28,29 @@ function NotesList({ Notes, setNotes }) {
                     <NoteCard
                         key={Note.id}
                         Note={Note}
-                        change_note_popup={change_note_popup}
+                        change_text_note_popup={change_text_note_popup}
+                        change_Voice_note_popup={change_Voice_note_popup}
                     />
                 ))}
             </ul>
             <AnimatePresence>
-                {note_popup && (
+                {text_note_popup && (
                     <div className="min-h-[500px]">
                         <Text_Note_PopUp
-                            note_id={note_popup}
-                            setNote_popup={setNote_popup}
+                            note_id={text_note_popup}
+                            set_text_note_popup={set_text_note_popup}
+                            Notes={Notes}
+                            setNotes={setNotes}
+                        />
+                    </div>
+                )}
+            </AnimatePresence>{" "}
+            <AnimatePresence>
+                {Voice_note_popup && (
+                    <div className="min-h-[500px]">
+                        <Voice_Note_PopUp
+                            note_id={Voice_note_popup}
+                            set_Voice_note_popup={set_Voice_note_popup}
                             Notes={Notes}
                             setNotes={setNotes}
                         />

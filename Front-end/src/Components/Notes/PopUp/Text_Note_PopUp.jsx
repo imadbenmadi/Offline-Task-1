@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import dayjs from "dayjs";
-import Edit_Note from "../../API_Calls/Edit_Note";
-import Delete_Note from "../../API_Calls/Delete_Note";
+import Edit_Note from "../../../API_Calls/Edit_Note";
+import Delete_Note from "../../../API_Calls/Delete_Note";
 import Swal from "sweetalert2";
 
-function Text_Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
+function Text_Note_PopUp({ note_id, set_text_note_popup, Notes, setNotes }) {
     const [note, setNote] = useState(null);
 
     useEffect(() => {
         if (!note_id) {
             Swal.fire("Error", "Invalid note id", "error");
-            setNote_popup(false);
+            set_text_note_popup(false);
             return;
         }
         setNote(Notes.find((n) => n.id === parseInt(note_id)));
-    }, [note_id, Notes, setNote_popup]);
+    }, [note_id, Notes, set_text_note_popup]);
 
     const [isEditing, setIsEditing] = useState(false);
     const [editTitle, setEditTitle] = useState("");
@@ -45,7 +45,7 @@ function Text_Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
                 setNotes,
             });
             setIsEditing(false);
-            setNote_popup(false); // Close popup after editing
+            set_text_note_popup(false); // Close popup after editing
         } catch (error) {
             Swal.fire("Error", "Failed to edit note", "error");
         }
@@ -66,7 +66,7 @@ function Text_Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
             >
                 <button
                     className="absolute top-4 right-4 text-gray-600 font-bold hover:text-gray-800 focus:outline-none"
-                    onClick={() => setNote_popup(false)}
+                    onClick={() => set_text_note_popup(false)}
                 >
                     ✕
                 </button>

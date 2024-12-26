@@ -1,7 +1,7 @@
 import React from "react";
 import dayjs from "dayjs";
 import Audio_player from "./audio_player";
-function NoteCard({ Note, change_note_popup }) {
+function NoteCard({ Note, change_text_note_popup, change_Voice_note_popup }) {
     if (!Note) return null;
     else if (Note.type === "audio" && !Note.Audio_Link) return null;
     else if (Note.type != "text" && !Note.type === "audio") return null;
@@ -9,7 +9,9 @@ function NoteCard({ Note, change_note_popup }) {
         <li
             className=" break-words border cursor-pointer rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]"
             onClick={() => {
-                if (Note.type === "text") change_note_popup(Note.id);
+                if (Note.type === "text") change_text_note_popup(Note.id);
+                else if (Note.type === "audio")
+                    change_Voice_note_popup(Note.id);
             }}
         >
             <div className="p-4 flex flex-col justify-between h-full">
