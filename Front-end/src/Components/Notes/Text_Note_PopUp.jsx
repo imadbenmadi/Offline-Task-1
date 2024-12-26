@@ -5,7 +5,7 @@ import Edit_Note from "../../API_Calls/Edit_Note";
 import Delete_Note from "../../API_Calls/Delete_Note";
 import Swal from "sweetalert2";
 
-function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
+function Text_Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
     const [note, setNote] = useState(null);
 
     useEffect(() => {
@@ -56,7 +56,7 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+            className="break-words fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
         >
             <motion.div
                 initial={{ scale: 0.8 }}
@@ -159,4 +159,4 @@ function Note_PopUp({ note_id, setNote_popup, Notes, setNotes }) {
     );
 }
 
-export default Note_PopUp;
+export default Text_Note_PopUp;

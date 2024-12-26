@@ -7,7 +7,7 @@ function NoteCard({ Note, change_note_popup }) {
     else if (Note.type != "text" && !Note.type === "audio") return null;
     return (
         <li
-            className="border cursor-pointer rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]"
+            className=" break-words border cursor-pointer rounded-lg shadow-md bg-white hover:shadow-lg transition-shadow duration-300 min-h-[200px]"
             onClick={() => {
                 if (Note.type === "text") change_note_popup(Note.id);
             }}

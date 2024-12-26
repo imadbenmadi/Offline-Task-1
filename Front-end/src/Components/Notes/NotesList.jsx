@@ -1,7 +1,7 @@
 import React from "react";
 import NoteCard from "./Note_Card";
 import { useState } from "react";
-import Note_PopUp from "./Note_PopUp";
+import Text_Note_PopUp from "./Text_Note_PopUp";
 import { AnimatePresence } from "framer-motion";
 
 function NotesList({ Notes, setNotes }) {
@@ -31,7 +31,7 @@ function NotesList({ Notes, setNotes }) {
             <AnimatePresence>
                 {note_popup && (
                     <div className="min-h-[500px]">
-                        <Note_PopUp
+                        <Text_Note_PopUp
                             note_id={note_popup}
                             setNote_popup={setNote_popup}
                             Notes={Notes}
