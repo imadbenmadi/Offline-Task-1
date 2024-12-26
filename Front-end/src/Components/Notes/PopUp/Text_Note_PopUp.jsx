@@ -45,7 +45,6 @@ function Text_Note_PopUp({ note_id, set_text_note_popup, Notes, setNotes }) {
                 setNotes,
             });
             setIsEditing(false);
-            set_text_note_popup(false); // Close popup after editing
         } catch (error) {
             Swal.fire("Error", "Failed to edit note", "error");
         }
