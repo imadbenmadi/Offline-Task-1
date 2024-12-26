@@ -56,7 +56,6 @@ const post_note = async ({
             Swal.fire("Error", "Failed to add note", "error");
         }
     } catch (error) {
-        console.log(error);
 
         Swal.fire("Error", "Failed to add note", "error");
     }

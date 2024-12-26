@@ -2,7 +2,6 @@ const Notes = require("../../models/Notes");
 const updateNote = async (req, res) => {
     try {
         const { Title, Description } = req.body;
-        console.log(req.body);
         let note;
         note = req.Note;
         if (!note) note = await Notes.findOne({ id: req.params.id });
