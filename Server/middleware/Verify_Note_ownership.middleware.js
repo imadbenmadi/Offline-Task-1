@@ -17,11 +17,11 @@ const Verify_Note_ownership = async (req, res, next) => {
                 message: "unauthorized : cannot access this Note ",
             });
         }
-        
+
         req.Note = Note;
         return next();
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return res.status(401).json({ message: "Invalid tokens" });
     }
 };

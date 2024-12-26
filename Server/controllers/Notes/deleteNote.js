@@ -17,7 +17,6 @@ const deleteNote = async (req, res) => {
             return res.status(200).json({ msg: "Note not found" });
         }
 
-
         // If the note has an audio file, delete it from the server
         if (note.type === "audio" && note.Audio_Link) {
             const audioPath = path.join(
@@ -32,8 +31,7 @@ const deleteNote = async (req, res) => {
         }
 
         // Delete the note from the database
-        await Notes.findByIdAndDelete(id);
-
+        await note.destroy();
         res.json({ msg: "Note deleted successfully" });
     } catch (error) {
         console.error("Error:", error.message);
