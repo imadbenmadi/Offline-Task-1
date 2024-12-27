@@ -8,7 +8,6 @@ const fetchProfile = async ({ setUser, setLoading }) => {
             withCredentials: true,
             validateStatus: () => true,
         });
-        console.log(res);
 
         if (res.status === 401) {
             window.location.href = "/";
