@@ -3,15 +3,21 @@ import { useAppContext } from "../AppContext";
 import { Link } from "react-router-dom";
 import dayjs from "dayjs";
 import Get_Profile from "../API_Calls/Profile_APIS/Get_Profile";
+import DeletePrfile from "../API_Calls/Profile_APIS/DeleteProfile";
 function Profile() {
-    const { userId } = useAppContext();
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
-
+    const [DeleteLoading, setDeleteLoading] = useState(false);
     useEffect(() => {
-        Get_Profile({ setUser: setUser });
+        Get_Profile({ setUser: setUser, setLoading });
     }, []);
-    if (loading) return <h1>Loading...</h1>;
+    if (loading) {
+        return (
+            <div className="w-[100vw] h-[80vh] flex items-center justify-center">
+                <span className="loader"></span>
+            </div>
+        );
+    }
     if (!user) return <h1>Failed to fetch user data</h1>;
     return (
         <div
@@ -28,37 +34,39 @@ function Profile() {
                 </h3>
                 <p className="text-gray-600">
                     <span className="font-medium">Full Name :</span>{" "}
-                    {userId?.firstName || "unavailable"}{" "}
-                    {userId?.lastName || ""}
+                    {user?.firstName || "unavailable"} {user?.lastName || ""}
                 </p>
                 <p className="text-gray-600">
                     <span className="font-medium"> Email :</span>{" "}
-                    {userId?.email || "unavailable"}
+                    {user?.email || "unavailable"}
                 </p>
             </div>
 
             <div className="border-b pb-4 mb-4 text-gray-600">
                 <p>
                     <span className="font-medium">Account Create on :</span>{" "}
-                    {userId?.createdAt
-                        ? dayjs(userId?.createdAt).format("DD-MMM-YYYY")
+                    {user?.createdAt
+                        ? dayjs(user?.createdAt).format("DD-MMM-YYYY")
                         : "unavailable"}
                 </p>
                 <p>
                     <span className="font-medium">Last Account Update :</span>{" "}
-                    {userId?.updatedAt
-                        ? dayjs(userId?.createdAt).format("DD-MMM-YYYY")
+                    {user?.updatedAt
+                        ? dayjs(user?.createdAt).format("DD-MMM-YYYY")
                         : "unavailable"}
                 </p>
             </div>
-
-            <div className="flex justify-center mt-6">
-                <Link
-                    to={`/Profile/Edit`}
-                    className="py-2 px-6 bg-green-500 text-white rounded-md hover:bg-green-600 transition duration-200"
-                >
-                    Edit
-                </Link>
+            <div
+                onClick={() => {
+                    DeletePrfile({ setDeleteLoading });
+                }}
+                className={`  cursor-pointer py-2 px-4 rounded-md text-white w-fit mx-auto font-bold ${
+                    DeleteLoading
+                        ? "bg-gray-400"
+                        : "bg-red-500 hover:bg-red-600"
+                }`}
+            >
+                {DeleteLoading ? " Deleting..." : "Delete Profile"}
             </div>
         </div>
     );

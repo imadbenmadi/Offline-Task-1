@@ -1,5 +1,8 @@
 const Users = require("../../models/Users");
 const Notes = require("../../models/Notes");
+const fs = require("fs");
+const path = require("path");
+
 const deleteProfile = async (req, res) => {
     try {
         if (!req.decoded.userId) {
