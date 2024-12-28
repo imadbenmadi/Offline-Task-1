@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
     frontend:
         image: benmadi/offline-task-1-frontend:latest
