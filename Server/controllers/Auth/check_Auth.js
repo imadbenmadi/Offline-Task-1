@@ -2,8 +2,8 @@ const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const Users = require("../../Models/Users");
-const Refresh_tokens = require("../../Models/RefreshTokens");
+const Users = require("../../models/Users");
+const Refresh_tokens = require("../../models/RefreshTokens");
 
 router.get("/", async (req, res) => {
     const { Users_ACCESS_TOKEN_SECRET, Users_REFRESH_TOKEN_SECRET } =

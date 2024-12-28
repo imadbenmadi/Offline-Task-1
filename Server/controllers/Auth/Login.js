@@ -1,8 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const jwt = require("jsonwebtoken");
-const Users = require("../../Models/Users");
-const Refresh_tokens = require("../../Models/RefreshTokens");
+const Users = require("../../models/Users");
+const Refresh_tokens = require("../../models/RefreshTokens");
 
 const handleLogin = async (req, res) => {
     try {
@@ -23,11 +23,9 @@ const handleLogin = async (req, res) => {
         } else if (user && user.password === password) {
             const Access_Secrute = process.env.Users_ACCESS_TOKEN_SECRET;
             const Refresh_Secrute = process.env.Users_REFRESH_TOKEN_SECRET;
-            const accessToken = jwt.sign(
-                { userId: user.id },
-                Access_Secrute,
-                { expiresIn: "1h" }
-            );
+            const accessToken = jwt.sign({ userId: user.id }, Access_Secrute, {
+                expiresIn: "1h",
+            });
             const refreshToken = jwt.sign(
                 { userId: user.id },
                 Refresh_Secrute,

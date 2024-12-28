@@ -91,7 +91,6 @@ This project is a full-stack application designed for securely managing daily no
         ```bash
         npm start
         ```
-    - **Ensure that you create the notesapp Data base in your local machine manualy before runing the server**
 
 3. **Frontend Setup**:
     - Navigate to the `front-end` directory:

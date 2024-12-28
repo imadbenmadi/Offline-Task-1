@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
-const Users = require("../Models/Users");
-const Notes = require("../Models/Notes");
+const Users = require("../models/Users");
+const Notes = require("../models/Notes");
 const Verify_Note_ownership = async (req, res, next) => {
     try {
         let Note = await Notes.findOne({
