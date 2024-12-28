@@ -1,34 +1,29 @@
 version: "3.8"
+
 services:
-    backend:
-        build:
-            context: ./Server
-            dockerfile: Dockerfile
-        ports:
-            - "3000:3000"
-        environment:
-            - DB_HOST=mysql
-            - DB_USER=root
-            - DB_PASSWORD=root
-            - DB_NAME=NotesApp
-            - Users_ACCESS_TOKEN_SECRET=secretKey-NotesApp-656503024395697824098765432456
-            - Users_REFRESH_TOKEN_SECRET=secretKey-NotesApp-64584683934548658939258386585634
-        depends_on:
-            - mysql
-
     frontend:
-        build:
-            context: ./Front-end
-            dockerfile: Dockerfile
+        image: benmadi/offline-task-1-frontend:latest
         ports:
-            - "5173:5173"
+            - "5173:80" # Maps port 5173 on the host to port 80 in the container
 
-    mysql:
-        image: mysql:8.0
-        container_name: mysql
+    backend:
+        image: benmadi/offline-task-1-backend:latest
         ports:
-            - "3306:3306"
+            - "3000:3000" # Maps port 3000 on the host to port 3000 in the container
+        env_file:
+            - ./Server/.env
+        depends_on:
+            - db
+
+    db:
+        image: benmadi/mysql:8
+        ports:
+            - "3307:3306"
         environment:
             MYSQL_ROOT_PASSWORD: root
             MYSQL_DATABASE: NotesApp
-            MYSQL_USER: root
+        volumes:
+            - db_data:/var/lib/mysql
+
+volumes:
+    db_data:

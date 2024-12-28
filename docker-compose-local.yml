@@ -1,0 +1,47 @@
+version: "3.8"
+
+services:
+    frontend:
+        build:
+            context: ./Front-end
+            dockerfile: Dockerfile
+        ports:
+            - "5173:80" # Maps port 5173 on the host to port 80 in the container
+        depends_on:
+            - backend
+        volumes:
+            - ./Front-end:/app # Optional: For live development
+
+    backend:
+        build:
+            context: ./Server
+            dockerfile: Dockerfile
+        ports:
+            - "3000:3000" # Maps port 3000 on the host to port 3000 in the container
+        environment:
+            DB_HOST: db
+            DB_USER: root
+            DB_PASSWORD: root
+            DB_NAME: NotesApp
+            Users_ACCESS_TOKEN_SECRET: secretKey-NotesApp-656503024395697824098765432456
+            Users_REFRESH_TOKEN_SECRET: secretKey-NotesApp-64584683934548658939258386585634
+        volumes:
+            - ./Server:/app # Optional: For live development
+        depends_on:
+            - db
+
+    db:
+        image: mysql:8
+        ports:
+            - "3307:3306"
+        environment:
+            MYSQL_ROOT_PASSWORD: root
+            MYSQL_DATABASE: NotesApp
+        volumes:
+            - db_data:/var/lib/mysql
+
+volumes:
+    db_data:
+
+
+# running the file  : docker-compose up --build
